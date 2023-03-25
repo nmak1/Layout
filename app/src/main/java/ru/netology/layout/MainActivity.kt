@@ -1,21 +1,18 @@
 package ru.netology.layout
 
 
-import android.icu.text.CompactDecimalFormat
+
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import ru.netology.layout.databinding.ActivityMainBinding
+import ru.netology.layout.Until.ConvertNumber.counterDecimal
 import ru.netology.layout.dto.Post
-import java.util.*
+
 
 
 class MainActivity : AppCompatActivity() {
 
-    fun convertNumber(number: Int, locale: Locale): String? {
-        val compactDecimalFormat: CompactDecimalFormat =
-            CompactDecimalFormat.getInstance(locale, CompactDecimalFormat.CompactStyle.SHORT)
-        return compactDecimalFormat.format(number.toLong())
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,16 +32,17 @@ class MainActivity : AppCompatActivity() {
             content.text = post.content
 
             if (post.LikeByMt) {
-                like?.setImageResource(R.drawable.baseline_favorite_border_24)
+                like.setImageResource(R.drawable.baseline_favorite_border_24)
             }
-            countlike.text = convertNumber(post.likes, Locale.US)
-            like?.setOnClickListener {
+            
+            countlike.text = counterDecimal(post.likes)
+            like.setOnClickListener {
                 post.LikeByMt = !post.LikeByMt
                 post.likes = if (post.LikeByMt) post.likes - 1 else {
                     post.likes + 1
                 }
 
-                countlike.text = convertNumber(post.likes, Locale.US)
+                countlike.text = counterDecimal(post.likes)
                 like.setImageResource(
                     if (post.LikeByMt) R.drawable.baseline_favorite_border_24
                     else
@@ -54,17 +52,17 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-            counsher.text = convertNumber(post.sheres, Locale.US)
+            counsher.text = counterDecimal(post.sheres)
 
-            share?.setOnClickListener {
+            share.setOnClickListener {
                 post.sheres = post.sheres + 1
-                counsher.text = convertNumber(post.sheres, Locale.US)
+                counsher.text = counterDecimal(post.sheres)
             }
 
-            countview.text = convertNumber(post.views, Locale.US)
-            view?.setOnClickListener {
-                post.views = post.views + 100
-                countview.text = convertNumber(post.views, Locale.US)
+            countview.text = counterDecimal(post.views)
+            view.setOnClickListener {
+                post.views = post.views + 68
+                countview.text = counterDecimal(post.views)
             }
 
         }
