@@ -51,7 +51,7 @@ object ConvertNumber {
         val valueDivMillion = valueToFloat / MILLION.toFloat()
 
         val result =
-            if (valueToFloat in THOUSAND.toFloat()..(MILLION.toFloat() - 1f) && valueToFloat % THOUSAND.toFloat() != ZERO.toFloat()&&valueToFloat<= 10*THOUSAND.toFloat()) {
+            if (valueToFloat in THOUSAND.toFloat()..(MILLION.toFloat() - 1f) && valueToFloat % THOUSAND.toFloat() != ZERO.toFloat()) {
                 roundingToDecimal(valueDivThousand)
             }  else if (valueToFloat >= MILLION.toFloat()) {
                 roundingToDecimal(valueDivMillion)
