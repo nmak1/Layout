@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 
             countview.text = counterDecimal(post.views)
             view.setOnClickListener {
-                post.views = post.views + 68
+                post.views = post.views + 1168
                 countview.text = counterDecimal(post.views)
             }
 

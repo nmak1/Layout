@@ -32,9 +32,17 @@ object ConvertNumber {
     }
 
     private fun roundingToDecimal(value: Float): String {
-        val result = DecimalFormat("#.#")
-        result.roundingMode = RoundingMode.DOWN
-        return result.format(value)
+
+        if (value in THOUSAND.toFloat()..(MILLION.toFloat() - 1f) && value % THOUSAND.toFloat() != ZERO.toFloat()&&value>= 10*THOUSAND.toFloat()){
+            val result = DecimalFormat("#")
+            result.roundingMode = RoundingMode.DOWN
+            return result.format(value)
+        } else{
+            val result = DecimalFormat("#.#")
+            result.roundingMode = RoundingMode.DOWN
+            return result.format(value)
+        }
+
     }
 
     fun counterDecimal(value: Long): String {
@@ -43,9 +51,9 @@ object ConvertNumber {
         val valueDivMillion = valueToFloat / MILLION.toFloat()
 
         val result =
-            if (valueToFloat in THOUSAND.toFloat()..(MILLION.toFloat() - 1f) && valueToFloat % THOUSAND.toFloat() != ZERO.toFloat()) {
+            if (valueToFloat in THOUSAND.toFloat()..(MILLION.toFloat() - 1f) && valueToFloat % THOUSAND.toFloat() != ZERO.toFloat()&&valueToFloat<= 10*THOUSAND.toFloat()) {
                 roundingToDecimal(valueDivThousand)
-            } else if (valueToFloat >= MILLION.toFloat()) {
+            }  else if (valueToFloat >= MILLION.toFloat()) {
                 roundingToDecimal(valueDivMillion)
             } else counter(value)
 
