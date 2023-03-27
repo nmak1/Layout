@@ -7,56 +7,26 @@ import java.text.DecimalFormat
 
 object ConvertNumber {
 
-    private const val ZERO = 0
     private const val THOUSAND = 1_000
     private const val MILLION = 1_000_000
 
-    private fun letterToCount(value: Long): String {
-        return if (value in THOUSAND until MILLION) {
-            "K"
-        } else if (value >= MILLION) {
-            "M"
+
+    fun counterDecimal(count: Long): String {
+        val value = count.toDouble()
+        val formatter = DecimalFormat("##.#")
+        formatter.roundingMode = RoundingMode.DOWN
+        return if (value < 1100.0) {
+            formatter.format(value)
         } else {
-            ""
+            if (count in 1100..10000) {
+                formatter.format(value / THOUSAND)+"K"
+            } else {
+                if (count in 10001 until MILLION) {
+                    val formate = DecimalFormat("#")
+                    formate.format(value / THOUSAND) + "K"
+                } else formatter.format(value / MILLION) + "M"
+
+            }
         }
-    }
-
-    private fun counter(value: Long): String {
-        val result = when (value) {
-            in ZERO until THOUSAND -> value
-            in THOUSAND until MILLION -> value / THOUSAND
-            in MILLION..Long.MAX_VALUE -> value / MILLION
-            else -> ZERO
-        }
-        return result.toString()
-    }
-
-    private fun roundingToDecimal(value: Float): String {
-
-        if (value in THOUSAND.toFloat()..(MILLION.toFloat() - 1f) && value % THOUSAND.toFloat() != ZERO.toFloat()&&value>= 10*THOUSAND.toFloat()){
-            val result = DecimalFormat("#")
-            result.roundingMode = RoundingMode.DOWN
-            return result.format(value)
-        } else{
-            val result = DecimalFormat("#.#")
-            result.roundingMode = RoundingMode.DOWN
-            return result.format(value)
-        }
-
-    }
-
-    fun counterDecimal(value: Long): String {
-        val valueToFloat = value.toFloat()
-        val valueDivThousand = valueToFloat / THOUSAND.toFloat()
-        val valueDivMillion = valueToFloat / MILLION.toFloat()
-
-        val result =
-            if (valueToFloat in THOUSAND.toFloat()..(MILLION.toFloat() - 1f) && valueToFloat % THOUSAND.toFloat() != ZERO.toFloat()) {
-                roundingToDecimal(valueDivThousand)
-            }  else if (valueToFloat >= MILLION.toFloat()) {
-                roundingToDecimal(valueDivMillion)
-            } else counter(value)
-
-        return result + letterToCount(value)
     }
 }
