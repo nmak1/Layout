@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
 
     <TextView
         android:id="@+id/author"
@@ -97,7 +97,7 @@
         android:background="#FFFFFF"
         android:src="@drawable/baseline_favorite_border_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/content"
+        app:layout_constraintTop_toBottomOf="@id/iconsBarrier"
         tools:src="@drawable/baseline_favorite_border_24" />
 
     <TextView
@@ -122,7 +122,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.186"
         app:layout_constraintStart_toEndOf="@+id/like"
-        app:layout_constraintTop_toBottomOf="@+id/content"
+        app:layout_constraintTop_toBottomOf="@id/iconsBarrier"
         tools:src="@drawable/baseline_share_24" />
 
     <TextView
@@ -145,7 +145,7 @@
         android:background="@android:color/transparent"
         android:src="@drawable/baseline_remove_red_eye_24"
         app:layout_constraintEnd_toStartOf="@+id/countview"
-        app:layout_constraintTop_toBottomOf="@+id/content"
+        app:layout_constraintTop_toBottomOf="@id/iconsBarrier"
         tools:src="@drawable/baseline_remove_red_eye_24" />
 
     <TextView
