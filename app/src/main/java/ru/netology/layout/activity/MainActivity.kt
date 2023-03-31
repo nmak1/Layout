@@ -12,21 +12,21 @@ import ru.netology.layout.viewmodel.PostViewModel
 
 class MainActivity : AppCompatActivity() {
 
-
+    val viewModel: PostViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val viewModel: PostViewModel by viewModels()
+
         viewModel.data.observe(this) { post ->
             with(binding) {
                 author.text = post.author
                 publisher.text = post.published
                 content.text = post.content
 
-                if (post.LikeByMe) {
-                    like.setImageResource(R.drawable.baseline_favorite_border_24)
-                } else like.setImageResource(R.drawable.baseline_favorite_red_24)
+                if (post.likeByMe) {
+                    like.setImageResource(R.drawable.baseline_favorite_red_24)
+                } else like.setImageResource(R.drawable.baseline_favorite_border_24)
 
                 countlike.text = counterDecimal(post.likes)
                 counsher.text = counterDecimal(post.sheres)
@@ -36,6 +36,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        listeneres(binding)
+
+
+    }
+
+    fun listeneres(binding: ActivityMainBinding) {
         binding.like.setOnClickListener {
             viewModel.like()
 
@@ -46,8 +52,6 @@ class MainActivity : AppCompatActivity() {
         binding.view.setOnClickListener {
             viewModel.view()
         }
-
-
     }
 
 }
