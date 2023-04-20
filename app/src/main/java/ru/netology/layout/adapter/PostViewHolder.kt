@@ -6,10 +6,11 @@ import ru.netology.layout.R
 import ru.netology.layout.Until.ConvertNumber
 import ru.netology.layout.databinding.CardPostBinding
 import ru.netology.layout.dto.Post
+import ru.netology.nmedia.adapter.OnInteractionListener
 
 class PostViewHolder(
     private val binding: CardPostBinding,
-    private val onInteractionListener: (Post) -> Unit,
+    private val onInteractionListener:OnInteractionListener
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(post: Post) {
         binding.apply {
@@ -23,22 +24,22 @@ class PostViewHolder(
             counsher.text = ConvertNumber.counterDecimal(post.shares)
             countview.text = ConvertNumber.counterDecimal(post.views)
 
-                like.setOnClickListener {
-                    onInteractionListener(post)
+            like.setOnClickListener {
+                onInteractionListener.onLike(post)
 
-                }
-                share.setOnClickListener {
-                    onInteractionListener(post)
-                }
-                view.setOnClickListener {
-                    onInteractionListener(post)
-
-                }
             }
+            share.setOnClickListener {
+                onInteractionListener.onShare(post)
+            }
+            view.setOnClickListener {
+                onInteractionListener.onViewPost(post)
 
-
+            }
         }
+
+
     }
+}
 
 
 

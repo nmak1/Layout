@@ -9,10 +9,11 @@ import ru.netology.layout.R
 import ru.netology.layout.databinding.ActivityMainBinding
 import ru.netology.layout.dto.Post
 import ru.netology.layout.viewmodel.PostViewModel
+import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnInteractionListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
@@ -21,11 +22,20 @@ class MainActivity : AppCompatActivity() {
         val viewModel: PostViewModel by viewModels()
 
 
-        val adapter = PostsAdapter {
-            viewModel.likeById(it.id)
-           viewModel.shareById(it.id)
-           viewModel.viewById(it.id)
-        }
+        val adapter = PostsAdapter(object :OnInteractionListener{
+            override fun onLike(post: Post){
+                viewModel.likeById(post.id)
+            }
+
+            override fun onShare(post: Post) {
+                viewModel.shareById(post.id)
+            }
+
+            override fun onViewPost(post: Post) {
+                viewModel.viewById(post.id)
+            }
+
+        })
 
 
 
