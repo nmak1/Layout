@@ -2,10 +2,8 @@ package ru.netology.layout.activity
 
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import ru.netology.layout.R
 import ru.netology.layout.databinding.ActivityMainBinding
 import ru.netology.layout.dto.Post
 import ru.netology.layout.viewmodel.PostViewModel
@@ -13,7 +11,7 @@ import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
 
 
-class MainActivity : AppCompatActivity(), OnInteractionListener {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)

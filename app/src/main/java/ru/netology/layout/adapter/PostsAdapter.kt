@@ -1,17 +1,15 @@
 package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import ru.netology.layout.adapter.PostViewHolder
 import ru.netology.layout.databinding.CardPostBinding
 import ru.netology.layout.dto.Post
-import java.io.Serializable
 
 //
-interface OnInteractionListener : Serializable {
+interface OnInteractionListener  {
     fun onLike(post: Post) {}
     fun onShare(post: Post) {}
     fun onViewPost(post: Post) {}
@@ -19,7 +17,7 @@ interface OnInteractionListener : Serializable {
 
 
 
-//typealias OnInteractionListener = (post: Post)->Unit
+
 
 
 

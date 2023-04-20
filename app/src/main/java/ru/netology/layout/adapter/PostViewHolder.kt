@@ -1,6 +1,5 @@
 package ru.netology.layout.adapter
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.layout.R
 import ru.netology.layout.Until.ConvertNumber
