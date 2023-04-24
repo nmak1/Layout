@@ -1,5 +1,6 @@
 package ru.netology.layout.adapter
 
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.layout.R
 import ru.netology.layout.Until.ConvertNumber
@@ -9,7 +10,7 @@ import ru.netology.nmedia.adapter.OnInteractionListener
 
 class PostViewHolder(
     private val binding: CardPostBinding,
-    private val onInteractionListener:OnInteractionListener
+    private val onInteractionListener: OnInteractionListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(post: Post) {
         binding.apply {
@@ -32,6 +33,26 @@ class PostViewHolder(
             }
             view.setOnClickListener {
                 onInteractionListener.onViewPost(post)
+
+            }
+            menu.setOnClickListener {
+                PopupMenu(it.context, it).apply {
+                    inflate(R.menu.post_options)
+                    setOnMenuItemClickListener { item->
+                        when (item.itemId) {
+                            R.id.remove -> {
+                                onInteractionListener.onRemove(post)
+                                true
+                            }
+                            R.id.edit -> {
+                                onInteractionListener.onEdit(post)
+                                true}
+                            else-> false
+                        }
+
+                    }
+
+                }.show()
 
             }
         }
