@@ -49,8 +49,55 @@ class MainActivity : AppCompatActivity() {
 
         })
 
+        binding.save.setOnClickListener {
+            with(binding.content)
+            {
+                if (text.isNullOrBlank()) {
+                    Toast.makeText(
+                        this@MainActivity,
+                        context.getString(R.string.error_empty_content),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setOnClickListener
+                }
 
+                viewModel.changeContent(text.toString())
+                viewModel.save()
 
+                setText("")
+                clearFocus()
+                AndroidUtils.hideKeyboard(this)
+            }
+        }
+        binding.clearEdit.setOnClickListener {
+            with(binding.content) {
+                viewModel.clearEdit()
+                setText("")
+                clearFocus()
+                AndroidUtils.hideKeyboard(this)
+            }
+        }
+
+        binding.textChanged.setOnClickListener {
+            with(binding.content)
+            {
+                if (text.isNullOrBlank()) {
+                    Toast.makeText(
+                        this@MainActivity,
+                        context.getString(R.string.error_empty_content),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setOnClickListener
+                }
+
+                viewModel.changeContent(text.toString())
+                viewModel.save()
+
+                setText("")
+                clearFocus()
+                AndroidUtils.hideKeyboard(this)
+            }
+        }
 
         binding.list.adapter = adapter
         viewModel.data.observe(this) { posts ->
@@ -70,43 +117,16 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-binding.clearEdit.setOnClickListener {
-    with(binding.content) {
-        viewModel.clearEdit()
-        clearFocus()
-        AndroidUtils.hideKeyboard(this)
-    }
-}
 
-
-
-
-
-            binding.save.setOnClickListener {
-                with(binding.content) {
-                    if (text.isNullOrBlank()) {
-                        Toast.makeText(
-                            this@MainActivity,
-                            context.getString(R.string.error_empty_content),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        return@setOnClickListener
-                    }
-
-                    viewModel.changeContent(text.toString())
-                    viewModel.save()
-
-                    setText("")
-                    clearFocus()
-                    AndroidUtils.hideKeyboard(this)
-                }
-            }
 
 
         }
 
+
     }
-    }
+
+}
+
 
 
 

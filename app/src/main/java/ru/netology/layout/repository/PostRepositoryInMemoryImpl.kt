@@ -136,7 +136,7 @@ class PostRepositoryInMemoryImpl : PostRepository {
     }
 
     override fun clearEdit(post: Post) {
-        TODO("Not yet implemented")
+       data.value = posts
     }
 
 
