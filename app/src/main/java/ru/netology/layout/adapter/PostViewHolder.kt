@@ -33,6 +33,10 @@ class PostViewHolder(
                 onInteractionListener.onViewPost(post)
 
             }
+            video.setOnClickListener {
+                onInteractionListener.onVideo(post)
+
+            }
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.post_options)
@@ -58,6 +62,7 @@ class PostViewHolder(
 
     }
 }
+
 
 
 

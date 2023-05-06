@@ -14,4 +14,6 @@
     <string name="menu_edit">Edit</string>
     <string name="error_empty_content">Content can\'t be empty</string>
     <string name="description_post_view" />
+    <string name="chooser_share_post" />
+    <string name="description_add_post" />
 </resources>

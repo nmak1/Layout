@@ -14,8 +14,8 @@ interface OnInteractionListener  {
     fun onShare(post: Post) {}
     fun onViewPost(post: Post) {}
     fun onRemove(post: Post) {}
-
     fun onEdit(post: Post) {}
+    fun onVideo(post: Post){}
 }
 
 
