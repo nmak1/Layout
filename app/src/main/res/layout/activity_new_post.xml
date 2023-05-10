@@ -30,6 +30,7 @@
         android:contentDescription="@string/description_post_save"
         app:srcCompat="@drawable/ic_ok_24dp"
         app:layout_anchor="@id/bottomAppBar"
+        android:background="@android:color/transparent"
         />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

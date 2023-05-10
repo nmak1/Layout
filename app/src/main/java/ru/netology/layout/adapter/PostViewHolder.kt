@@ -1,6 +1,7 @@
 package ru.netology.layout.adapter
 
 import android.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.layout.R
 import ru.netology.layout.Until.ConvertNumber
@@ -21,7 +22,7 @@ class PostViewHolder(
             like.text = ConvertNumber.counterDecimal(post.likes)
             share.text = ConvertNumber.counterDecimal(post.shares)
             view.text = ConvertNumber.counterDecimal(post.views)
-
+            video.isVisible = !post.videoUrl.isNullOrBlank()
             like.setOnClickListener {
                 onInteractionListener.onLike(post)
 
@@ -34,6 +35,7 @@ class PostViewHolder(
 
             }
             video.setOnClickListener {
+
                 onInteractionListener.onVideo(post)
 
             }
