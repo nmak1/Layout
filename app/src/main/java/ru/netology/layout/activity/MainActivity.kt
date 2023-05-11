@@ -3,9 +3,11 @@ package ru.netology.layout.activity
 
 import android.content.Intent
 import android.net.Uri
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.result.launch
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -33,14 +35,15 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onViewPost(post: Post) {
-                viewModel.shareById(post.id)
+                viewModel.viewById(post.id)
             }
 
-            override fun onShare(post: Post) {val intent = Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, post.content)
-                type = "text/plain"
-            }
+            override fun onShare(post: Post) {
+                val intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, post.content)
+                    type = "text/plain"
+                }
 
                 val shareIntent =
                     Intent.createChooser(intent, getString(R.string.chooser_share_post))
@@ -52,11 +55,10 @@ class MainActivity : AppCompatActivity() {
                 viewModel.removeById(post.id)
             }
 
-
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
-
             }
+
             override fun onVideo(post: Post) {
                 post.videoUrl?.let { viewModel.video() }
                 if (!post.videoUrl.isNullOrEmpty()) {
@@ -124,7 +126,7 @@ class MainActivity : AppCompatActivity() {
                 viewModel.save()
             }
         }
-        binding.addPost.setOnClickListener{
+        binding.addPost.setOnClickListener {
             newPostContract.launch()
         }
 
@@ -132,12 +134,14 @@ class MainActivity : AppCompatActivity() {
             result ?: return@registerForActivityResult
             viewModel.changeContent(result)
             viewModel.save()
+
         }
         binding.list.adapter = adapter
-        viewModel.data.observe(this) {  posts ->
+        viewModel.data.observe(this) { posts ->
             val newPost = adapter.itemCount < posts.size
             adapter.submitList(posts) {
                 if (newPost) binding.list.smoothScrollToPosition(0)
+
             }
         }
 
@@ -146,7 +150,13 @@ class MainActivity : AppCompatActivity() {
                 return@observe
             }
             editPostLauncher.launch(it.content)
+
         }
+    }
+
+    override fun onBackPressed() {
+        onBackPressedDispatcher
+
     }
 
 //        viewModel.edited.observe(this) { post ->

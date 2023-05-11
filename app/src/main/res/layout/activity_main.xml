@@ -24,12 +24,14 @@
         android:id="@+id/add_post"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:contentDescription="@string/description_add_post"
         android:background="@android:color/transparent"
-        android:textColorHint="@color/white"
+        android:contentDescription="@string/description_add_post"
+        android:src="@android:drawable/ic_input_add"
+        android:textColorHint="@color/purple_200"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible" />
 
     <!--    <EditText-->
     <!--        android:id="@+id/content"-->

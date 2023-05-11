@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import ru.netology.layout.databinding.ActivityMainBinding
 import ru.netology.layout.databinding.ActivityNewPostBinding
 
 class NewPostActivity :AppCompatActivity() {
@@ -25,5 +26,9 @@ class NewPostActivity :AppCompatActivity() {
             }
             finish()
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 }
