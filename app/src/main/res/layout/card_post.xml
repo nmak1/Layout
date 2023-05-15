@@ -83,7 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="content"
+        app:constraint_referenced_ids="content,video,videoImage"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="241dp" />
 
@@ -135,36 +135,37 @@
         app:layout_constraintTop_toBottomOf="@id/iconsBarrier"
         tools:text="@sample/posts.json/data/views" />
 
-        <com.google.android.material.button.MaterialButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/video"
         style="@style/Widget.AppTheme.IconButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
         android:checkable="true"
         android:visibility="gone"
         app:icon="@drawable/ic_play_48"
+        android:gravity="center"
+        android:background="@drawable/background_video"
         app:iconGravity="textStart"
         app:iconPadding="0dp"
-        app:iconTint="@color/white"
+        android:padding="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        app:layout_constraintBottom_toTopOf="@id/iconsBarrier"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/content"
-        app:layout_constraintBottom_toTopOf="@id/iconsBarrier"
-        />
+        app:layout_constraintTop_toBottomOf="@id/content" />
 
     <ImageView
         android:id="@+id/videoImage"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/netology_icon_foreground"
+        android:src="@drawable/background_video"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toBottomOf="@id/content"
+        app:srcCompat="@drawable/background_video"
+        tools:layout_editor_absoluteX="32dp"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import ru.netology.layout.databinding.ActivityMainBinding
 import ru.netology.layout.databinding.ActivityNewPostBinding
 
@@ -26,9 +27,15 @@ class NewPostActivity :AppCompatActivity() {
             }
             finish()
         }
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                intent.putExtra(Intent.EXTRA_TEXT, intent?.getStringExtra(Intent.EXTRA_TEXT))
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+            }
+        })
+
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
+
 }
