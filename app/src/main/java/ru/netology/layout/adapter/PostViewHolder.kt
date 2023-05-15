@@ -23,6 +23,7 @@ class PostViewHolder(
             share.text = ConvertNumber.counterDecimal(post.shares)
             view.text = ConvertNumber.counterDecimal(post.views)
             video.isVisible = !post.videoUrl.isNullOrBlank()
+            videoImage.isVisible =  !post.videoUrl.isNullOrBlank()
             like.setOnClickListener {
                 onInteractionListener.onLike(post)
 
