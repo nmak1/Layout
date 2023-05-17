@@ -14,6 +14,11 @@ private val gson = Gson()
     private val type = TypeToken.getParameterized(List::class.java, Post::class.java).type
     private val filename = "posts.json"
     private var posts = emptyList<Post>()
+        set(value) {
+            field = value
+            data.value = value
+            sync()
+        }
     private val data = MutableLiveData(posts)
     init {
         val file = context.filesDir.resolve(filename)
@@ -43,8 +48,7 @@ private val gson = Gson()
             else it
 
         }
-        data.value = posts
-        sync()
+
     }
 
     override fun shareById(id: Long) {
@@ -54,7 +58,7 @@ private val gson = Gson()
 
         }
 
-        data.value = posts
+
     }
 
     override fun viewById(id: Long) {
@@ -64,8 +68,7 @@ private val gson = Gson()
 
         }
 
-        data.value = posts
-        sync()
+
     }
 
     override fun save(post: Post) {
@@ -79,33 +82,29 @@ private val gson = Gson()
 
                 )
             ) + posts
-            data.value = posts
+
             return
         }
 
         posts = posts.map {
             if (it.id != post.id) it else it.copy(content = post.content)
         }
-        data.value = posts
-        sync()
+
     }
 
     override fun video() {
-        data.value = posts
-        sync()
+
     }
 
     override fun removeById(id: Long) {
         posts=posts.filter {
             it.id!=id
         }
-        data.value = posts
-        sync()
+
     }
 
     override fun clearEdit(post: Post) {
-       data.value = posts
-        sync()
+       
     }
 
 
