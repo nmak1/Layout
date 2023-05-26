@@ -16,4 +16,6 @@
     <string name="description_post_view" />
     <string name="chooser_share_post" />
     <string name="description_add_post" />
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

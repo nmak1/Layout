@@ -1,6 +1,11 @@
 package ru.netology.layout.dto
 
 
+import android.os.Parcel
+import android.os.Parcelable
+
+
+
 
 data class Post(
     val id: Long,
@@ -12,5 +17,14 @@ data class Post(
     val shares:Long = 0,
     val views: Long = 0,
     val videoUrl: String?=null
-)
+) : Parcelable {
+    override fun describeContents(): Int {
+        TODO("Not yet implemented")
+    }
+
+    override fun writeToParcel(p0: Parcel, p1: Int) {
+        TODO("Not yet implemented")
+    }
+}
+
 

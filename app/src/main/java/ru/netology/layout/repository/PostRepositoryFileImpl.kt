@@ -39,6 +39,7 @@ private val gson = Gson()
     }
     override fun getAll(): LiveData<List<Post>> = data
 
+
     override fun likeById(id:Long) {
         posts = posts.map {
             if (it.id==id) it.copy(

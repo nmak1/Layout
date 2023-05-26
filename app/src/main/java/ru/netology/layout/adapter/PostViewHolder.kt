@@ -5,12 +5,12 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.layout.R
 import ru.netology.layout.Until.ConvertNumber
-import ru.netology.layout.databinding.CardPostBinding
+import ru.netology.layout.databinding.ActivityCardPostFragmentBinding
 import ru.netology.layout.dto.Post
 import ru.netology.nmedia.adapter.OnInteractionListener
 
 class PostViewHolder(
-    private val binding: CardPostBinding,
+    private val binding:ActivityCardPostFragmentBinding,
     private val onInteractionListener: OnInteractionListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(post: Post) {
@@ -40,6 +40,8 @@ class PostViewHolder(
                 onInteractionListener.onVideo(post)
 
             }
+            thisPost.setOnClickListener { onInteractionListener.onPost(post) }
+
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.post_options)

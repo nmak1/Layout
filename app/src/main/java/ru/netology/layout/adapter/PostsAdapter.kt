@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import ru.netology.layout.adapter.PostViewHolder
-import ru.netology.layout.databinding.CardPostBinding
+import ru.netology.layout.databinding.ActivityCardPostFragmentBinding
 import ru.netology.layout.dto.Post
 
 //
@@ -16,6 +16,7 @@ interface OnInteractionListener  {
     fun onRemove(post: Post) {}
     fun onEdit(post: Post) {}
     fun onVideo(post: Post){}
+    fun onPost(post: Post){}
 }
 
 
@@ -30,7 +31,7 @@ class PostsAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
-        val binding = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ActivityCardPostFragmentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PostViewHolder(binding,onInteractionListener)
     }
 
@@ -47,9 +48,12 @@ class PostsAdapter(
             oldItem.id == newItem.id
 
         override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean = oldItem == newItem
+        override fun getChangePayload(oldItem: Post, newItem: Post): Any = Unit
 
     }
+
 }
+
 
 
 
