@@ -53,6 +53,7 @@ class PostFragment : Fragment() {
 
                         like.setOnClickListener { viewModel.likeById(post.id) }
                         share.setOnClickListener { viewModel.shareById(post.id) }
+                        view.setOnClickListener{viewModel.viewById(post.id)}
                         video.setOnClickListener {
                             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.videoUrl))
                             startActivity(intent)

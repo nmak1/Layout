@@ -63,6 +63,10 @@ class FeedFragment : Fragment() {
                     viewModel.shareById(post.id)
                 }
 
+                override fun onViewPost(post: Post) {
+                    viewModel.viewById(post.id)
+                }
+
                 override fun onVideo(post: Post) {
                     val intentVideo = Intent(Intent.ACTION_VIEW, Uri.parse(post.videoUrl))
                     startActivity(intentVideo)
