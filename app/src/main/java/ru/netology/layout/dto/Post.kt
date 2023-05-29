@@ -12,9 +12,10 @@ data class Post(
     val content: String,
     val likeByMe: Boolean = false,
     val likes: Long = 0,
-    val shares:Long = 0,
+    val shares: Long = 0,
     val views: Long = 0,
-    val videoUrl: String?=null
+    val videoUrl: String? = null,
+    val authorAvatar: String
 )
 
 

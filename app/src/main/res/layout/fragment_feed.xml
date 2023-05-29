@@ -6,14 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".activity.FeedFragment">
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-89dp"
         tools:listitem="@layout/activity_card_post_fragment" />
-
-
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_post"
@@ -24,6 +25,7 @@
         android:src="@android:drawable/ic_input_add"
         android:textColorHint="@color/purple_200"
         android:visibility="visible"
+        android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:visibility="visible" />

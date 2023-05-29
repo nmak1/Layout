@@ -11,14 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.layout.R
+import ru.netology.layout.Until.IntArg
 import ru.netology.layout.activity.NewPostFragment.Companion.textArg
 import ru.netology.layout.databinding.FragmentFeedBinding
 import ru.netology.layout.dto.Post
 import ru.netology.layout.viewmodel.PostViewModel
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
-import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KProperty
 
 
 class FeedFragment : Fragment() {
@@ -103,15 +102,7 @@ class FeedFragment : Fragment() {
         var Bundle.idArg: Int by IntArg
     }
 
-    object IntArg : ReadWriteProperty<Bundle, Int> {
-        override fun getValue(thisRef: Bundle, property: KProperty<*>): Int {
-            return thisRef.getInt(property.name)
-        }
 
-        override fun setValue(thisRef: Bundle, property: KProperty<*>, value: Int) {
-            thisRef.putInt(property.name, value)
-        }
-    }
 }
 
 
