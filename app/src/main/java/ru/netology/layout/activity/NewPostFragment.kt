@@ -31,6 +31,7 @@ class NewPostFragment : Fragment() {private val viewModel: PostViewModel by view
             binding.edit.setText(it)
         }
 
+
         binding.edit.requestFocus()
         binding.ok.setOnClickListener {
             viewModel.changeContent(binding.edit.text.toString())
@@ -40,6 +41,7 @@ class NewPostFragment : Fragment() {private val viewModel: PostViewModel by view
         }
         return binding.root
     }
+
 
     companion object {
         var Bundle.textArg: String? by StringArg

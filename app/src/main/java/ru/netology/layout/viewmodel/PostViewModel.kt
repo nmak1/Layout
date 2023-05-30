@@ -6,7 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import ru.netology.layout.db.AppDb
 import ru.netology.layout.dto.Post
 import ru.netology.layout.repository.PostRepository
-import ru.netology.layout.repository.PostRepositorySQLiteImpl
+import ru.netology.layout.repository.PostRepositoryImpl
+
 
 private val empty = Post(
 
@@ -23,7 +24,7 @@ private val empty = Post(
 )
 class PostViewModel(application: Application) :  AndroidViewModel(application) {
     private val repository: PostRepository =
-        PostRepositorySQLiteImpl(AppDb.getInstance(application).postDao)
+        PostRepositoryImpl(AppDb.getInstance(context = application).postDao())
     val edited = MutableLiveData(empty)
     val data = repository.getAll()
 
@@ -58,7 +59,7 @@ class PostViewModel(application: Application) :  AndroidViewModel(application) {
     fun viewById(id: Long) = repository.viewById(id)
     fun removeById(id: Long) = repository.removeById(id)
 
-    fun  video ()= repository.video()
+
 
 
 }

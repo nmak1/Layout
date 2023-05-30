@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.activity.OnBackPressedDispatcher
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -16,7 +17,6 @@ import ru.netology.layout.activity.FeedFragment.Companion.idArg
 import ru.netology.layout.activity.NewPostFragment.Companion.textArg
 import ru.netology.layout.databinding.ActivityCardPostFragmentBinding
 import ru.netology.layout.databinding.FragmentPostBinding
-import ru.netology.layout.dto.Post
 import ru.netology.layout.viewmodel.PostViewModel
 
 class PostFragment : Fragment() {
@@ -30,6 +30,7 @@ class PostFragment : Fragment() {
     ): View {
         val binding = FragmentPostBinding.inflate(inflater, container, false)
         val id = arguments?.idArg
+
 
         viewModel.data.observe(viewLifecycleOwner) { posts ->
             binding.postContent.apply {
@@ -62,7 +63,9 @@ class PostFragment : Fragment() {
                             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.videoUrl))
                             startActivity(intent)
                         }
-
+                        requireActivity().onBackPressedDispatcher.addCallback(this) {
+                            viewModel.save()
+                        }
                         menu.setOnClickListener {
                             PopupMenu(it.context, it).apply {
                                 inflate(R.menu.post_options)
@@ -71,9 +74,6 @@ class PostFragment : Fragment() {
                                     when (menuItem.itemId) {
                                         R.id.remove -> {
                                             viewModel.removeById(post.id)
-//                                            findNavController().navigate(
-//                                                R.id.action_postFragment_to_feedFragment
-//                                            )
                                             findNavController().navigateUp()
                                             true
                                         }
@@ -98,4 +98,11 @@ class PostFragment : Fragment() {
         }
         return binding.root
     }
+}
+
+private fun OnBackPressedDispatcher.addCallback(
+    owner: ActivityCardPostFragmentBinding,
+    onBackPressedCallback: () -> Unit,
+) {
+   onBackPressedCallback
 }
