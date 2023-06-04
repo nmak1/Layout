@@ -13,6 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+app/google-services.json
 ### STS ###
 .apt_generated
 .classpath
@@ -56,3 +57,6 @@ captures/
 
 ### Gradle ###
 !gradle/wrapper/gradle-wrapper.jar
+
+### Firebase ###
+app/google-services.json

@@ -1,24 +1,26 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
+    id 'org.jetbrains.kotlin.kapt'
+    id 'com.google.gms.google-services'
 }
 
 android {
-    namespace 'ru.netology.layout'
+    namespace "ru.netology.nmedia"
     compileSdk 33
 
     defaultConfig {
-        applicationId "ru.netology.layout"
-        minSdk 30
+        applicationId "ru.netology.nmedia"
+        minSdk 23
         targetSdk 33
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildFeatures {
-        viewBinding = true
+        viewBinding true
     }
 
     buildTypes {
@@ -34,11 +36,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    buildToolsVersion '33.0.1'
 }
 
 dependencies {
-
     def core_version = "1.10.1"
     def appcompat_version = "1.6.1"
     def mdc_version = "1.9.0"
@@ -51,9 +51,10 @@ dependencies {
     def lifecycle_version = "2.6.1"
     def gson_version = "2.10.1"
     def nav_version = "2.5.3"
-    def room_ver = "2.5.1"
+    def room_version = "2.5.1"
+    def firebase_version = "32.1.0"
+    def play_services_base_version = "18.2.0"
 
-    implementation 'com.google.code.gson:gson:2.10.1'
     implementation "androidx.core:core-ktx:$core_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "com.google.android.material:material:$mdc_version"
@@ -62,18 +63,16 @@ dependencies {
     implementation "androidx.activity:activity-ktx:$activity_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-    implementation 'com.android.support:support-annotations:28.0.0'
     implementation "com.google.code.gson:gson:$gson_version"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.core:core-ktx:1.10.1'
-    implementation 'androidx.annotation:annotation:1.6.0'
-    implementation "androidx.room:room-runtime:$room_ver"
-    kapt "androidx.room:room-compiler:$room_ver"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation platform ("com.google.firebase:firebase-bom:$firebase_version")
+    implementation "com.google.firebase:firebase-messaging-ktx"
+    implementation "com.google.android.gms:play-services-base:$play_services_base_version"
+
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
-
-
 }

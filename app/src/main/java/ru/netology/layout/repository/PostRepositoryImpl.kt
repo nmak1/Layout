@@ -1,10 +1,11 @@
 package ru.netology.layout.repository
 
 import androidx.lifecycle.map
-import ru.netology.layout.dao.PostDao
+import ru.netology.layout.activity.PostDao
 import ru.netology.layout.dto.Post
+import ru.netology.layout.entity.PostEntity
 
-class PostRepositoryImpl(private val dao:PostDao) : PostRepository {
+class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 
 
 
@@ -36,7 +37,7 @@ class PostRepositoryImpl(private val dao:PostDao) : PostRepository {
     }
 
     override fun save(post: Post) {
-        dao.save(post)
+        dao.save(PostEntity.fromDto(post))
     }
 
 

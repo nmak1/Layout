@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import ru.netology.layout.adapter.PostViewHolder
-import ru.netology.layout.databinding.ActivityCardPostFragmentBinding
 import ru.netology.layout.dto.Post
+import ru.netology.nmedia.databinding.ActivityCardPostFragmentBinding
 
 //
 interface OnInteractionListener  {

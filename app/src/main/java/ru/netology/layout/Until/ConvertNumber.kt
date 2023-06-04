@@ -11,7 +11,7 @@ object ConvertNumber {
     private const val MILLION = 1_000_000
 
 
-    fun counterDecimal(count: Long): String {
+    fun counterDecimal(count: Int): String {
         val value = count.toDouble()
         val formatter = DecimalFormat("##.#")
         formatter.roundingMode = RoundingMode.DOWN

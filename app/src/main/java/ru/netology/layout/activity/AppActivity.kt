@@ -3,14 +3,17 @@ package ru.netology.layout.activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
-import ru.netology.layout.R
+import com.google.firebase.messaging.FirebaseMessaging
 import ru.netology.layout.activity.NewPostFragment.Companion.textArg
+import ru.netology.nmedia.R
 
 class AppActivity : AppCompatActivity(R.layout.activity_app) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            println("current token: $it")
+        }
 
         intent?.let {
             if (it.action != Intent.ACTION_SEND) {
@@ -26,6 +29,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                         textArg = text
                     })
             }
+
         }
     }
 }

@@ -10,14 +10,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import ru.netology.layout.R
 import ru.netology.layout.Until.IntArg
 import ru.netology.layout.activity.NewPostFragment.Companion.textArg
-import ru.netology.layout.databinding.FragmentFeedBinding
 import ru.netology.layout.dto.Post
 import ru.netology.layout.viewmodel.PostViewModel
+import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
+import ru.netology.nmedia.databinding.FragmentFeedBinding
 
 
 class FeedFragment : Fragment() {

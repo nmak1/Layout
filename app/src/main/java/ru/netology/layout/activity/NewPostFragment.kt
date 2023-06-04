@@ -9,8 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.layout.Until.AndroidUtils
 import ru.netology.layout.Until.StringArg
-import ru.netology.layout.databinding.FragmentNewPostBinding
 import ru.netology.layout.viewmodel.PostViewModel
+import ru.netology.nmedia.databinding.FragmentNewPostBinding
 
 class NewPostFragment : Fragment() {private val viewModel: PostViewModel by viewModels(
     ownerProducer = ::requireParentFragment

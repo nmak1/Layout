@@ -1,4 +1,4 @@
-package ru.netology.layout.dao
+package ru.netology.layout.activity
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -15,7 +15,7 @@ interface PostDao {
     @Query("SELECT * FROM PostEntity ORDER BY id DESC")
     fun getAll(): LiveData<List<PostEntity>>
     @Insert
-    fun insert(post: Post)
+    fun insert(post: PostEntity)
 
     @Query("UPDATE PostEntity SET content = :content WHERE id = :id")
     fun updateContentById(id: Long, content: String)
@@ -23,8 +23,8 @@ interface PostDao {
     @Query(
         """
                 UPDATE PostEntity SET
-                likes = likes + CASE WHEN liked THEN -1 ELSE 1 END,
-                liked = CASE WHEN liked THEN 0 ELSE 1 END
+                likes = likes + CASE WHEN likeByMe THEN -1 ELSE 1 END,
+                likeByMe = CASE WHEN likeByMe THEN 0 ELSE 1 END
                 WHERE id = :id;
                 """
     )
@@ -47,7 +47,7 @@ interface PostDao {
     fun viewById(id: Long)
     @Query("DELETE FROM PostEntity WHERE id = :id")
     fun removeById(id: Long)
-    fun save(post: Post) =
+    fun save(post: PostEntity) =
         if (post.id == 0L) insert(post) else updateContentById(post.id, post.content)
 
 }

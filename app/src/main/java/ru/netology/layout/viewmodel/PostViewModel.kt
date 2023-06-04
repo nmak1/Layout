@@ -9,7 +9,7 @@ import ru.netology.layout.repository.PostRepository
 import ru.netology.layout.repository.PostRepositoryImpl
 
 
-private val empty = Post(
+private val emptyPost = Post(
 
     0,
     "Somebody",
@@ -25,21 +25,22 @@ private val empty = Post(
 class PostViewModel(application: Application) :  AndroidViewModel(application) {
     private val repository: PostRepository =
         PostRepositoryImpl(AppDb.getInstance(context = application).postDao())
-    val edited = MutableLiveData(empty)
+    val edited = MutableLiveData(emptyPost)
     val data = repository.getAll()
 
     fun save() {
         edited.value?.let {
             repository.save(it)
+            edited.value = emptyPost
         }
-        edited.value = empty
+
     }
 
     fun edit(post: Post) {
         edited.value = post
     }
     fun clearEdit(){
-        edited.value= empty
+        edited.value= emptyPost
     }
 
     fun changeContent(content: String) {

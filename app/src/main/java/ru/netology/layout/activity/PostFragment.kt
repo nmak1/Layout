@@ -11,13 +11,13 @@ import androidx.activity.OnBackPressedDispatcher
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import ru.netology.layout.R
 import ru.netology.layout.Until.ConvertNumber
 import ru.netology.layout.activity.FeedFragment.Companion.idArg
 import ru.netology.layout.activity.NewPostFragment.Companion.textArg
-import ru.netology.layout.databinding.ActivityCardPostFragmentBinding
-import ru.netology.layout.databinding.FragmentPostBinding
 import ru.netology.layout.viewmodel.PostViewModel
+import ru.netology.nmedia.R
+import ru.netology.nmedia.databinding.ActivityCardPostFragmentBinding
+import ru.netology.nmedia.databinding.FragmentPostBinding
 
 class PostFragment : Fragment() {
 
