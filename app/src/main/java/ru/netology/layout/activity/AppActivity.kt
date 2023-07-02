@@ -5,8 +5,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.google.firebase.messaging.FirebaseMessaging
+import ru.netology.layout.R
 import ru.netology.layout.activity.NewPostFragment.Companion.textArg
-import ru.netology.nmedia.R
 
 class AppActivity : AppCompatActivity(R.layout.activity_app) {
     override fun onCreate(savedInstanceState: Bundle?) {

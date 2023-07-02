@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import ru.netology.layout.Until.AndroidUtils
-import ru.netology.layout.Until.StringArg
+import ru.netology.layout.until.AndroidUtils
+import ru.netology.layout.until.StringArg
 import ru.netology.layout.viewmodel.PostViewModel
-import ru.netology.nmedia.databinding.FragmentNewPostBinding
+import ru.netology.layout.databinding.FragmentNewPostBinding
 
 class NewPostFragment : Fragment() {private val viewModel: PostViewModel by viewModels(
     ownerProducer = ::requireParentFragment

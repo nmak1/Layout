@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace "ru.netology.nmedia"
+    namespace "ru.netology.layout"
     compileSdk 33
 
     defaultConfig {
-        applicationId "ru.netology.nmedia"
+        applicationId "ru.netology.layout"
         minSdk 23
         targetSdk 33
         versionCode 1
@@ -50,8 +50,8 @@ dependencies {
     def activity_version = "1.7.2"
     def lifecycle_version = "2.6.1"
     def gson_version = "2.10.1"
-    def nav_version = "2.5.3"
-    def room_version = "2.5.1"
+    def nav_version = "2.6.0"
+    def room_version = "2.5.2"
     def firebase_version = "32.1.0"
     def play_services_base_version = "18.2.0"
 

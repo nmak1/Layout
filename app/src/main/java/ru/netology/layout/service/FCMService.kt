@@ -16,7 +16,7 @@ import com.google.gson.Gson
 import ru.netology.layout.service.notifications.Action
 import ru.netology.layout.service.notifications.Like
 import ru.netology.layout.service.notifications.NewPost
-import ru.netology.nmedia.R
+import ru.netology.layout.R
 import kotlin.random.Random
 import ru.netology.layout.service.notifications.Notification
 

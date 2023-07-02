@@ -3,15 +3,14 @@ package ru.netology.layout.adapter
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import ru.netology.layout.Until.ConvertNumber
+import ru.netology.layout.until.ConvertNumber
 import ru.netology.layout.dto.Post
-import ru.netology.nmedia.R
-import ru.netology.nmedia.adapter.OnInteractionListener
-import ru.netology.nmedia.databinding.ActivityCardPostFragmentBinding
+import ru.netology.layout.R
+import ru.netology.layout.databinding.ActivityCardPostFragmentBinding
 
 class PostViewHolder(
     private val binding: ActivityCardPostFragmentBinding,
-    private val onInteractionListener: OnInteractionListener,
+    private val onInteractionListener : OnInteractionListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(post: Post) {
         binding.apply {

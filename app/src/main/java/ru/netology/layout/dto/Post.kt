@@ -1,10 +1,6 @@
 package ru.netology.layout.dto
 
 
-
-
-
-
 data class Post(
     val id: Long,
     val author: String,

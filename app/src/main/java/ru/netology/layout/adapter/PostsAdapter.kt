@@ -1,12 +1,11 @@
-package ru.netology.nmedia.adapter
+package ru.netology.layout.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import ru.netology.layout.adapter.PostViewHolder
 import ru.netology.layout.dto.Post
-import ru.netology.nmedia.databinding.ActivityCardPostFragmentBinding
+import ru.netology.layout.databinding.ActivityCardPostFragmentBinding
 
 //
 interface OnInteractionListener  {
