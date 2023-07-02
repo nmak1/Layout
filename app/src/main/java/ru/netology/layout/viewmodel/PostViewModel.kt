@@ -2,65 +2,116 @@ package ru.netology.layout.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import ru.netology.layout.db.AppDb
+import ru.netology.layout.until.SingleLiveEvent
 import ru.netology.layout.dto.Post
+import ru.netology.layout.model.FeedModel
 import ru.netology.layout.repository.PostRepository
 import ru.netology.layout.repository.PostRepositoryImpl
+import java.io.IOException
+import kotlin.concurrent.thread
 
 
 private val emptyPost = Post(
 
-    0,
-    "Somebody",
+     0,
+     "",
     "",
-    "Once upon a time",
-    false,
+     "",
+     false,
+     0,
     0,
-    0,
-    0,
-    "0",
-    "0"
+     0,
+     "0",
+     "0"
 )
-class PostViewModel(application: Application) :  AndroidViewModel(application) {
-    private val repository: PostRepository =
-        PostRepositoryImpl(AppDb.getInstance(context = application).postDao())
+
+class PostViewModel(application: Application) : AndroidViewModel(application) {
+    // упрощённый вариант
+    private val repository: PostRepository = PostRepositoryImpl()
+    private val _data = MutableLiveData(FeedModel())
+    val data: LiveData<FeedModel>
+        get() = _data
     val edited = MutableLiveData(emptyPost)
-    val data = repository.getAll()
+    private val _postCreated = SingleLiveEvent<Unit>()
+    val postCreated: LiveData<Unit>
+        get() = _postCreated
+
+    init {
+        loadPosts()
+    }
+
+    fun loadPosts() {
+        thread {
+            // Начинаем загрузку
+            _data.postValue(FeedModel(loading = true))
+            try {
+                // Данные успешно получены
+                val posts = repository.getAll()
+                FeedModel(posts = posts, empty = posts.isEmpty())
+            } catch (e: IOException) {
+                // Получена ошибка
+                FeedModel(error = true)
+            }.also(_data::postValue)
+        }
+    }
 
     fun save() {
         edited.value?.let {
-            repository.save(it)
-            edited.value = emptyPost
+            thread {
+                repository.save(it)
+                _postCreated.postValue(Unit)
+            }
         }
-
+        edited.value = emptyPost
     }
 
     fun edit(post: Post) {
         edited.value = post
     }
-    fun clearEdit(){
-        edited.value= emptyPost
-    }
 
     fun changeContent(content: String) {
-        edited.value?.let {
-            val text = content.trim()
-            if (it.content==text) {
-                return
-            }
-            edited.value = it.copy(content = text)
+        val text = content.trim()
+        if (edited.value?.content == text) {
+            return
         }
-
-
-
+        edited.value = edited.value?.copy(content = text)
     }
-    fun likeById(id: Long) = repository.likeById(id)
-    fun shareById(id: Long) = repository.shareById(id)
-    fun viewById(id: Long) = repository.viewById(id)
-    fun removeById(id: Long) = repository.removeById(id)
 
+    fun likeById(id: Long) {
+        thread {
+            repository.likeById(id)
+        }
+    }
 
+    fun unlikeById(id: Long) {
+        thread { repository.unlikeById(id) }
+    }
 
+    fun shareById(id: Long) {
+        thread { repository.shareById(id) }
+    }
+
+    fun viewById(id: Long) {
+        thread { repository.viewById(id) }
+    }
+
+    fun removeById(id: Long) {
+        thread {
+            //Оптимистичная модель
+            val old = _data.value?.posts.orEmpty()
+            _data.postValue(
+                _data.value?.copy(posts = _data.value?.posts.orEmpty()
+                    .filter { it.id != id }
+                )
+            )
+            try {
+                repository.removeById(id)
+            } catch (e: IOException) {
+                _data.postValue(_data.value?.copy(posts = old))
+            }
+        }
+    }
 
 }

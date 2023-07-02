@@ -9,8 +9,8 @@ import ru.netology.layout.R
 import ru.netology.layout.databinding.ActivityCardPostFragmentBinding
 
 class PostViewHolder(
-    private val binding: ActivityCardPostFragmentBinding,
-    private val onInteractionListener : OnInteractionListener,
+    private val binding : ActivityCardPostFragmentBinding,
+    private val onInteractionListener: OnInteractionListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(post: Post) {
         binding.apply {
@@ -18,11 +18,34 @@ class PostViewHolder(
             publisher.text = post.published
             content.text = post.content
             like.isChecked = post.likeByMe
-            like.text = ConvertNumber.counterDecimal(post.likes)
+            like.text = "${post.likes}"
             share.text = ConvertNumber.counterDecimal(post.shares)
             view.text = ConvertNumber.counterDecimal(post.views)
             video.isVisible = !post.videoUrl.isNullOrBlank()
-            videoImage.isVisible =  !post.videoUrl.isNullOrBlank()
+            videoImage.isVisible = !post.videoUrl.isNullOrBlank()
+
+
+            menu.setOnClickListener {
+                PopupMenu(it.context, it).apply {
+                    inflate(R.menu.post_options)
+                    setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.remove -> {
+                                onInteractionListener.onRemove(post)
+                                true
+                            }
+                            R.id.edit -> {
+                                onInteractionListener.onEdit(post)
+                                true
+                            }
+                            else -> false
+                        }
+
+                    }
+
+                }.show()
+
+            }
             like.setOnClickListener {
                 onInteractionListener.onLike(post)
 
@@ -39,34 +62,11 @@ class PostViewHolder(
                 onInteractionListener.onVideo(post)
 
             }
-            thisPost.setOnClickListener { onInteractionListener.onPost(post) }
-
-            menu.setOnClickListener {
-                PopupMenu(it.context, it).apply {
-                    inflate(R.menu.post_options)
-                    setOnMenuItemClickListener { item->
-                        when (item.itemId) {
-                            R.id.remove -> {
-                                onInteractionListener.onRemove(post)
-                                true
-                            }
-                            R.id.edit -> {
-                                onInteractionListener.onEdit(post)
-                                true}
-                            else-> false
-                        }
-
-                    }
-
-                }.show()
-
-            }
         }
 
 
     }
 }
-
 
 
 

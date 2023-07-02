@@ -27,7 +27,13 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            manifestPlaceholders.usesCleartextTraffic = false
         }
+        debug {
+            manifestPlaceholders.usesCleartextTraffic = true
+
+        }
+
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -39,6 +45,7 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     def core_version = "1.10.1"
     def appcompat_version = "1.6.1"
     def mdc_version = "1.9.0"
@@ -54,6 +61,8 @@ dependencies {
     def room_version = "2.5.2"
     def firebase_version = "32.1.0"
     def play_services_base_version = "18.2.0"
+    def okhttp_version = "5.0.0-alpha.11"
+
 
     implementation "androidx.core:core-ktx:$core_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
@@ -71,8 +80,16 @@ dependencies {
     implementation platform ("com.google.firebase:firebase-bom:$firebase_version")
     implementation "com.google.firebase:firebase-messaging-ktx"
     implementation "com.google.android.gms:play-services-base:$play_services_base_version"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+    // define a BOM and its version
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
+
+    // define any required OkHttp artifacts without version
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:logging-interceptor")
 
     testImplementation "junit:junit:$junit_version"
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.10.0")
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
 }

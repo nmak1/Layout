@@ -24,4 +24,7 @@
     <string name="error_notification_text" />
     <string name="error_notification_title" />
     <string name="notification_user_new_posted"> Notification_user_new_posted </string>
+    <string name="empty_posts">empty_posts</string>
+    <string name="retry_loading">retry_loading</string>
+    <string name="error_loading">error_loading</string>
 </resources>
