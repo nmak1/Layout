@@ -10,17 +10,13 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import ru.netology.layout.until.IntArg
-import ru.netology.layout.activity.NewPostFragment.Companion.textArg
-import ru.netology.layout.dto.Post
-import ru.netology.layout.viewmodel.PostViewModel
 import ru.netology.layout.R
-import ru.netology.layout.databinding.FragmentFeedBinding
 import ru.netology.layout.adapter.OnInteractionListener
 import ru.netology.layout.adapter.PostsAdapter
-
+import ru.netology.layout.databinding.FragmentFeedBinding
+import ru.netology.layout.dto.Post
+import ru.netology.layout.viewmodel.PostViewModel
 
 
 class FeedFragment : Fragment() {
@@ -85,6 +81,7 @@ class FeedFragment : Fragment() {
             binding.progress.isVisible = state.loading
             binding.errorGroup.isVisible = state.error
             binding.emptyText.isVisible = state.empty
+            binding.swipeRefresh.isRefreshing = state.refreshing
 
         }
 

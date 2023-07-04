@@ -1,15 +1,12 @@
 package ru.netology.layout.repository
 
-import androidx.lifecycle.map
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import ru.netology.layout.dao.PostDao
 import ru.netology.layout.dto.Post
-import ru.netology.layout.entity.PostEntity
 import java.util.concurrent.TimeUnit
 
 class PostRepositoryImpl : PostRepository {
@@ -32,7 +29,7 @@ class PostRepositoryImpl : PostRepository {
 
         return client.newCall(request)
             .execute()
-            .let { it.body?.string() ?: throw RuntimeException("body is null") }
+            .let { it.body.string() }
             .let {
                 gson.fromJson(it, typeToken.type)
             }
@@ -41,26 +38,32 @@ class PostRepositoryImpl : PostRepository {
 
 
 
-    override fun likeById(id: Long)  {
+    override fun likeById(id: Long)  : Post {
         val request: Request = Request.Builder()
             .post(gson.toJson(Unit).toRequestBody(jsonType))
             .url("${BASE_URL}/api/posts/$id/likes")
             .build()
 
-        client.newCall(request)
+        return client.newCall(request)
             .execute()
-            .close()
-
+            .let { it.body.string() }
+            .let {
+                gson.fromJson(it, Post::class.java)
+            }
     }
-    override fun unlikeById(id: Long)  {
+
+    override fun unlikeById(id: Long) : Post  {
         val request: Request = Request.Builder()
             .delete(gson.toJson(id).toRequestBody(jsonType))
             .url("${BASE_URL}/api/posts/$id/likes")
             .build()
 
-        client.newCall(request)
+        return client.newCall(request)
             .execute()
-            .close()
+            .let { it.body.string() }
+            .let {
+                gson.fromJson(it, Post::class.java)
+            }
     }
 
     override fun shareById(id: Long) {

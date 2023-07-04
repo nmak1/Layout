@@ -4,11 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import ru.netology.layout.until.SingleLiveEvent
 import ru.netology.layout.dto.Post
 import ru.netology.layout.model.FeedModel
 import ru.netology.layout.repository.PostRepository
 import ru.netology.layout.repository.PostRepositoryImpl
+import ru.netology.layout.until.SingleLiveEvent
 import java.io.IOException
 import kotlin.concurrent.thread
 
@@ -26,6 +26,7 @@ private val emptyPost = Post(
      "0",
      "0"
 )
+
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
     // упрощённый вариант
@@ -45,7 +46,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     fun loadPosts() {
         thread {
             // Начинаем загрузку
-            _data.postValue(FeedModel(loading = true))
+            _data.postValue(FeedModel(loading = true, refreshing = true))
             try {
                 // Данные успешно получены
                 val posts = repository.getAll()
@@ -81,7 +82,21 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun likeById(id: Long) {
         thread {
-            repository.likeById(id)
+            _data.postValue(FeedModel(loading = true))
+            val oldPost = _data.value?.posts.orEmpty().find { it.id == id }
+            try {
+                if (oldPost != null) {
+                    if (!oldPost.likeByMe) {
+                        repository.likeById(id)
+                    } else {
+                        repository.unlikeById(id)
+                    }
+                }
+                loadPosts()
+                _data.postValue(FeedModel(loading = false))
+            } catch (e: Exception) {
+                _data.postValue(FeedModel(error = true))
+            }
         }
     }
 
@@ -115,3 +130,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 }
+
+
+
+
+
+
