@@ -15,16 +15,16 @@ import kotlin.concurrent.thread
 
 private val emptyPost = Post(
 
-     0,
-     "",
-    "",
-     "",
-     false,
-     0,
     0,
-     0,
-     "0",
-     "0"
+    "",
+    "",
+    "",
+    false,
+    0,
+    0,
+    0,
+    "0",
+    "0"
 )
 
 
@@ -81,24 +81,20 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(id: Long) {
-        thread {
-            _data.postValue(FeedModel(loading = true))
-            val oldPost = _data.value?.posts.orEmpty().find { it.id == id }
+         thread {
+            val old = _data.value?.posts.orEmpty()
             try {
-                if (oldPost != null) {
-                    if (!oldPost.likeByMe) {
-                        repository.likeById(id)
-                    } else {
-                        repository.unlikeById(id)
-                    }
-                }
-                loadPosts()
-                _data.postValue(FeedModel(loading = false))
-            } catch (e: Exception) {
-                _data.postValue(FeedModel(error = true))
+                if (_data.value?.posts.orEmpty().filter { it.id == id }.none { it.likeByMe }) {
+                    repository.likeById(id)
+                } else repository.unlikeById(id)
+            } catch (e: IOException) {
+                _data.postValue(_data.value?.copy(posts = old))
             }
+            loadPosts()
         }
     }
+
+
 
     fun unlikeById(id: Long) {
         thread { repository.unlikeById(id) }
