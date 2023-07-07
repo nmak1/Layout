@@ -18,7 +18,7 @@ class PostRepositoryImpl : PostRepository {
     private val typeToken = object : TypeToken<List<Post>>() {}
 
     companion object {
-        private const val BASE_URL = "http://10.0.2.2:9990"
+        private const val BASE_URL = "http://10.0.2.2:9999"
         private val jsonType = "application/json".toMediaType()
     }
 
@@ -99,7 +99,7 @@ class PostRepositoryImpl : PostRepository {
         client.newCall(request)
             .enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                callback.onSuccess(Post(0, "", "", "", false))
+                callback.onSuccess(Post(0, "", "", "", authorAvatar = "", likeByMe = false))
             }
 
             override fun onFailure(call: Call, e: IOException) {
