@@ -11,7 +11,10 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import ru.netology.layout.R
+import ru.netology.layout.activity.NewPostFragment.Companion.textArg
 import ru.netology.layout.adapter.OnInteractionListener
 import ru.netology.layout.adapter.PostsAdapter
 import ru.netology.layout.databinding.FragmentFeedBinding
@@ -34,6 +37,9 @@ class FeedFragment : Fragment() {
 
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
+                findNavController().navigate(R.id.action_feedFragment_to_newPostFragment,
+                    Bundle().apply
+                    { textArg = post.content })
             }
 
             override fun onLike(post: Post) {
@@ -61,9 +67,6 @@ class FeedFragment : Fragment() {
                 startActivity(shareIntent)
             }
 
-            override fun onViewPost(post: Post) {
-                viewModel.viewById(post.id)
-            }
 
             override fun onVideo(post: Post) {
                 val intentVideo = Intent(Intent.ACTION_VIEW, Uri.parse(post.videoUrl))
@@ -82,6 +85,13 @@ class FeedFragment : Fragment() {
             binding.errorGroup.isVisible = state.error
             binding.emptyText.isVisible = state.empty
             binding.swipeRefresh.isRefreshing = state.refreshing
+            if (state.error) {
+                Snackbar.make(
+                    binding.root,
+                    state.messageOfCodeError,
+                    BaseTransientBottomBar.LENGTH_LONG
+                ).show()
+            }
 
         }
 
