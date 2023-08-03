@@ -1,13 +1,18 @@
 package ru.netology.layout.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import ru.netology.layout.api.PostsApi
+import ru.netology.layout.db.AppDb
 import ru.netology.layout.dto.Post
 import ru.netology.layout.model.FeedModel
+import ru.netology.layout.model.FeedModelState
 import ru.netology.layout.repository.PostRepository
 import ru.netology.layout.repository.PostRepositoryImpl
+import ru.netology.layout.until.RetryTypes
 import ru.netology.layout.until.SingleLiveEvent
 
 
@@ -30,7 +35,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: PostRepository =
         PostRepositoryImpl(AppDb.getInstance(application).postDao())
     val data: LiveData<FeedModel> = repository.data.map { FeedModel(it, it.isEmpty()) }
-    private val edited = MutableLiveData(empty)
+    private val edited = MutableLiveData(emptyPost)
 
     private val _state = MutableLiveData(FeedModelState())
     val state: LiveData<FeedModelState>
@@ -68,7 +73,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
         }
-        edited.value = empty
+        edited.value = emptyPost
     }
 
 

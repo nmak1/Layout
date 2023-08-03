@@ -19,7 +19,7 @@ class PostViewHolder(
             author.text = post.author
             publisher.text = post.published
             content.text = post.content
-            like.isChecked = post.likeByMe
+            like.isChecked = post.likedByMe
             like.text = "${post.likes}"
             share.text = ConvertNumber.counterDecimal(post.shares)
             view.text = ConvertNumber.counterDecimal(post.views)

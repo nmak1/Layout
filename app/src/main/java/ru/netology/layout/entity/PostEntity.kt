@@ -20,7 +20,7 @@ data class PostEntity(
 ) {
     fun toDto() =
         Post(
-            id, author, published, content, likeByMe, likes, shares, views, authorAvatar
+            id, author, published, content, likeByMe, likes, shares, views, videoUrl, authorAvatar
         )
 
     companion object {
@@ -30,10 +30,11 @@ data class PostEntity(
                 dto.author,
                 dto.published,
                 dto.content,
-                dto.likeByMe,
+                dto.likedByMe,
                 dto.likes,
                 dto.shares,
                 dto.views,
+                dto.videoUrl,
                 dto.authorAvatar
             )
         }

@@ -19,12 +19,13 @@ import ru.netology.layout.adapter.OnInteractionListener
 import ru.netology.layout.adapter.PostsAdapter
 import ru.netology.layout.databinding.FragmentFeedBinding
 import ru.netology.layout.dto.Post
+import ru.netology.layout.until.RetryTypes
 import ru.netology.layout.viewmodel.PostViewModel
 
 
 class FeedFragment : Fragment() {
 
-    private val viewModel: PostViewModel by activityViewModels(ownerProducer = ::requireParentFragment)
+    private val viewModel: PostViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,12 +47,11 @@ class FeedFragment : Fragment() {
             }
 
             override fun onLike(post: Post) {
-                if (post.likeByMe) {
+                if (post.likedByMe) {
                     viewModel.unlikeById(post.id)
                 } else {
                     viewModel.likeById(post.id)
                 }
-                viewModel.loadPosts()
             }
 
 
@@ -96,17 +96,16 @@ class FeedFragment : Fragment() {
                     binding.root,
                     R.string.error_loading,
                     BaseTransientBottomBar.LENGTH_LONG
-                ).show()
-                ).setAction(R.string.retry_loading) {
-                    when (state.retryType) {
-                        RetryTypes.LIKE -> viewModel.likeById(state.retryId)
-                        RetryTypes.UNLIKE -> viewModel.unlikeById(state.retryId)
-                        RetryTypes.SAVE -> viewModel.retrySave(state.retryPost)
-                        RetryTypes.REMOVE -> viewModel.removeById(state.retryId)
-                        else -> viewModel.loadPosts()
-                    }
-                }
-                    .show()
+                )
+                    .setAction(R.string.retry_loading) {
+                        when (state.retryType) {
+                            RetryTypes.LIKE -> viewModel.likeById(state.retryId)
+                            RetryTypes.UNLIKE -> viewModel.unlikeById(state.retryId)
+                            RetryTypes.SAVE -> viewModel.retrySave(state.retryPost)
+                            RetryTypes.REMOVE -> viewModel.removeById(state.retryId)
+                            else -> viewModel.loadPosts()
+                        }
+                    }.show()
             }
 
         }
@@ -124,11 +123,6 @@ class FeedFragment : Fragment() {
 
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.loadPosts()
-        }
-
-        viewModel.newerCount.observe(viewLifecycleOwner) {
-            //TODO Make in HomeWork
-            println("Newer count: $it")
         }
 
         return binding.root
