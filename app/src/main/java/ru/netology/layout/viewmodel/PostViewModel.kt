@@ -2,8 +2,10 @@ package ru.netology.layout.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.layout.api.PostsApi
 import ru.netology.layout.db.AppDb
@@ -35,11 +37,17 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: PostRepository =
         PostRepositoryImpl(AppDb.getInstance(application).postDao())
     val data: LiveData<FeedModel> = repository.data.map { FeedModel(it, it.isEmpty()) }
+        .asLiveData(Dispatchers.Default)
     private val edited = MutableLiveData(emptyPost)
 
     private val _state = MutableLiveData(FeedModelState())
     val state: LiveData<FeedModelState>
         get() = _state
+
+    val newerCount: LiveData<Int> = data.switchMap {
+        repository.getNewerCount(it.posts.firstOrNull()?.id ?: 0L)
+            .asLiveData(Dispatchers.Default)
+    }
 
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>

@@ -6,15 +6,46 @@ import ru.netology.layout.entity.toEntity
 import ru.netology.layout.errors.ApiException
 import ru.netology.layout.errors.NetworkException
 import ru.netology.layout.errors.UnknownException
-import androidx.lifecycle.map
 import ru.netology.layout.api.PostsApi
 import ru.netology.layout.dao.PostDao
 import ru.netology.layout.dto.Post
 import java.io.IOException
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 
 class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 
     override val data = dao.getAll().map { it.toDto() }
+        .flowOn(Dispatchers.Default)
+
+    override fun getNewerCount(firstId: Long): Flow<Int> = flow {
+        try {
+            while (true) {
+                val response = PostsApi.service.getNewer(firstId)
+                if (!response.isSuccessful) {
+                    throw ApiException(response.code(), response.message())
+                }
+                val body =
+                    response.body() ?: throw ApiException(response.code(), response.message())
+                dao.insert(body.toEntity())
+                emit(body.size)
+                delay(10_000L)
+            }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: ApiException) {
+            throw e
+        } catch (e: IOException) {
+            throw NetworkException
+        } catch (e: Exception) {
+            throw UnknownException
+        }
+    }
 
     override suspend fun getAll() {
         try {

@@ -125,6 +125,11 @@ class FeedFragment : Fragment() {
             viewModel.loadPosts()
         }
 
+        viewModel.newerCount.observe(viewLifecycleOwner) {
+            //TODO Make in HomeWork
+            println("Newer count: $it")
+        }
+
         return binding.root
     }
 }
