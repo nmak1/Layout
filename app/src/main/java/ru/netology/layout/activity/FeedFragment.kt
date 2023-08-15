@@ -110,6 +110,22 @@ class FeedFragment : Fragment() {
 
         }
 
+        binding.newPosts.visibility = View.GONE
+
+        viewModel.newerCount.observe(viewLifecycleOwner) {
+            if (it > 0) {
+                binding.newPosts.text = getString(R.string.new_posts)
+                binding.newPosts.visibility = View.VISIBLE
+            }
+            println("Newer count: $it")
+        }
+
+        binding.newPosts.setOnClickListener {
+            binding.newPosts.visibility = View.GONE
+            binding.container.smoothScrollToPosition(0)
+            viewModel.loadNewPosts()
+        }
+
 
 
         binding.retryButton.setOnClickListener {

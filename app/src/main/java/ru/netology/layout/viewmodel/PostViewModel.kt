@@ -61,7 +61,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     fun loadPosts() = viewModelScope.launch {
         try {
             _state.value = FeedModelState(loading = true)
-            repository.getAll()
+            repository.getNewPosts()
             _state.value = FeedModelState()
         } catch (e: Exception) {
             _state.value = FeedModelState(error = true)
@@ -133,6 +133,16 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             repository.removeById(id)
         } catch (e: Exception) {
             _state.value = FeedModelState(error = true, retryType = RetryTypes.REMOVE, retryId = id)
+        }
+    }
+
+    fun loadNewPosts() = viewModelScope.launch {
+        try {
+            _state.value = FeedModelState(loading = true)
+            repository.getNewPosts()
+            _state.value = FeedModelState()
+        } catch (e: Exception) {
+            _state.value = FeedModelState(error = true)
         }
     }
 

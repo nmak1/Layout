@@ -13,7 +13,7 @@ import ru.netology.layout.entity.PostEntity
 
 @Dao
 interface PostDao {
-    @Query("SELECT * FROM PostEntity ORDER BY id DESC")
+    @Query("SELECT * FROM PostEntity WHERE views = 0 ORDER BY id DESC")
     fun getAll(): Flow<List<PostEntity>>
 
     @Insert(onConflict = REPLACE)
@@ -37,14 +37,8 @@ interface PostDao {
         """)
     suspend fun likeById(id: Long)
 
-    @Query(
-        """
-                UPDATE PostEntity SET
-                views = views + 1
-                WHERE id = :id
-                """
-    )
-    suspend fun viewById(id: Long)
+    @Query("UPDATE PostEntity SET views = 1 WHERE views = 0")
+    suspend fun viewedPosts()
 
     @Query("DELETE FROM PostEntity WHERE id = :id")
     suspend fun removeById(id: Long)
