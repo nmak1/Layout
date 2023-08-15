@@ -18,6 +18,7 @@ class NewPostFragment : Fragment() {
     companion object {
         var Bundle.textArg: String? by StringArg
     }
+    private var fragmentBinding: FragmentNewPostBinding? = null
 
     private val viewModel: PostViewModel by activityViewModels()
 
@@ -31,6 +32,7 @@ class NewPostFragment : Fragment() {
             container,
             false
         )
+        fragmentBinding = binding
 
         arguments?.textArg.let(binding.edit::setText)
 
@@ -40,7 +42,6 @@ class NewPostFragment : Fragment() {
             AndroidUtils.hideKeyboard(requireView())
         }
         viewModel.postCreated.observe(viewLifecycleOwner) {
-            viewModel.loadPosts()
             findNavController().navigateUp()
         }
         return binding.root

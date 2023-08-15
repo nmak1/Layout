@@ -44,7 +44,7 @@ interface PostDao {
                 WHERE id = :id
                 """
     )
-    fun viewById(id: Long)
+    suspend fun viewById(id: Long)
 
     @Query("DELETE FROM PostEntity WHERE id = :id")
     suspend fun removeById(id: Long)

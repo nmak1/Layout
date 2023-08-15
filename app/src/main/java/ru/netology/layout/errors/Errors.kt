@@ -1,8 +1,19 @@
 package ru.netology.layout.errors
 
-sealed class AppError(private val code: Int, private val info: String) : RuntimeException()
+import java.io.IOException
+import java.sql.SQLException
 
-class ApiException(code: Int, info: String) : AppError(code, info)
-
-object NetworkException : AppError(code = -1, info = "No_Network_Exception")
-object UnknownException : AppError(code = -2, info = "Unknown_Exception")
+sealed class AppError(var code: String) : RuntimeException() {
+    companion object {
+        fun from(e: Throwable): AppError = when (e) {
+            is AppError -> e
+            is SQLException -> DbException
+            is IOException -> NetworkException
+            else -> UnknownException
+        }
+    }
+}
+class ApiException(val status: Int, code: String) : AppError(code)
+object NetworkException : AppError("error_network")
+object DbException : AppError("error_db")
+object UnknownException : AppError("error_unknown")

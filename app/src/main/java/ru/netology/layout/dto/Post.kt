@@ -9,7 +9,7 @@ data class Post(
     val likedByMe: Boolean ,
     val likes: Int =0 ,
     val shares: Int =0 ,
-    val views: Int =0 ,
+    val views: Boolean =false ,
     val videoUrl: String?= null ,
     val authorAvatar: String?=null,
     val attachment: Attachment? = null,

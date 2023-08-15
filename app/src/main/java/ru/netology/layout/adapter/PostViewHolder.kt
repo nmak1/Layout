@@ -22,7 +22,7 @@ class PostViewHolder(
             like.isChecked = post.likedByMe
             like.text = "${post.likes}"
             share.text = ConvertNumber.counterDecimal(post.shares)
-            view.text = ConvertNumber.counterDecimal(post.views)
+            view.text = "${post.views}"
             video.isVisible = !post.videoUrl.isNullOrBlank()
             videoImage.isVisible = !post.videoUrl.isNullOrBlank()
             attachment.visibility = View.GONE
@@ -87,6 +87,7 @@ class PostViewHolder(
                 onInteractionListener.onVideo(post)
 
             }
+
         }
 
 

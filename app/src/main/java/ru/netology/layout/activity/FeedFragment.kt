@@ -81,7 +81,7 @@ class FeedFragment : Fragment() {
 
 
 
-        binding.list.adapter = adapter
+        binding.container.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { state ->
             adapter.submitList(state.posts)
             binding.emptyText.isVisible = state.empty
@@ -126,7 +126,10 @@ class FeedFragment : Fragment() {
         }
 
         viewModel.newerCount.observe(viewLifecycleOwner) {
-            //TODO Make in HomeWork
+            if (it > 0) {
+                binding.newPosts.text = getString(R.string.new_posts)
+                binding.newPosts.visibility = View.VISIBLE
+            }
             println("Newer count: $it")
         }
 
