@@ -10,6 +10,7 @@ data class Attachment(
         fun fromDto(dto: Attachment?) = dto?.let {
             Attachment(it.url, it.type)
         }
+
     }
 }
 

@@ -28,4 +28,11 @@
     <string name="error_loading">error_loading</string>
     <string name="description_post_attachment" translatable="false" />
     <string name="new_posts">new_posts</string>
+    <string name="description_image_full_screen" />
+    <string name="description_pick_photo" />
+    <string name="description_take_photo" />
+    <string name="clear" />
+    <string name="description_photo" />
+    <string name="post_input_text_hint" />
+    <string name="save" />
 </resources>

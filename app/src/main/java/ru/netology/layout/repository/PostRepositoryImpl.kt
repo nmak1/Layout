@@ -8,11 +8,13 @@ import ru.netology.layout.errors.NetworkException
 import ru.netology.layout.errors.UnknownException
 import ru.netology.layout.api.PostsApi
 import ru.netology.layout.dao.PostDao
-import ru.netology.layout.dto.Post
 import java.io.IOException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import ru.netology.layout.dto.*
 import ru.netology.layout.errors.AppError
 
 class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
@@ -75,8 +77,7 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             }
 
             val body = response.body() ?: throw ApiException(response.code(), response.message())
-            dao.insert(PostEntity.fromDto(body)
-                .copy())
+            dao.insert(PostEntity.fromDto(body))
         } catch (e: IOException) {
             throw NetworkException
         } catch (e: Exception) {
@@ -92,8 +93,7 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
                 throw ApiException(response.code(), response.message())
             }
             val body = response.body() ?: throw ApiException(response.code(), response.message())
-            dao.insert(PostEntity.fromDto(body)
-                .copy())
+            dao.insert(PostEntity.fromDto(body))
         } catch (e: IOException) {
             throw NetworkException
         } catch (e: Exception) {
@@ -109,8 +109,40 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
                 throw ApiException(response.code(), response.message())
             }
             val body = response.body() ?: throw ApiException(response.code(), response.message())
-            dao.insert(PostEntity.fromDto(body)
-                .copy(views = true))
+            dao.insert(PostEntity.fromDto(body))
+        } catch (e: IOException) {
+            throw NetworkException
+        } catch (e: Exception) {
+            throw UnknownException
+        }
+    }
+
+    override suspend fun saveWithAttachment(post: Post, upload: MediaUpload) {
+        try {
+            val media = uploadWithContent(upload)
+            val postWithAttachment =
+                post.copy(attachment = Attachment(media.id, TypeAttachment.IMAGE))
+            save(postWithAttachment)
+        } catch (e: IOException) {
+            throw NetworkException
+        } catch (e: Exception) {
+            throw UnknownException
+        }
+    }
+
+    override suspend fun uploadWithContent(upload: MediaUpload): Media {
+        try {
+            val media = MultipartBody.Part.createFormData("file",
+                upload.file.name,
+                upload.file.asRequestBody())
+
+            val content = MultipartBody.Part.createFormData("content", "text")
+
+            val response = PostsApi.service.uploadPhoto(media, content)
+            if (!response.isSuccessful) {
+                throw ApiException(response.code(), response.message())
+            }
+            return response.body() ?: throw ApiException(response.code(), response.message())
         } catch (e: IOException) {
             throw NetworkException
         } catch (e: Exception) {

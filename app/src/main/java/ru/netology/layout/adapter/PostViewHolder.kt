@@ -5,6 +5,7 @@ import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import ru.netology.layout.BuildConfig.BASE_URL
 import ru.netology.layout.R
 import ru.netology.layout.databinding.ActivityCardPostFragmentBinding
 import ru.netology.layout.dto.Post
@@ -26,7 +27,7 @@ class PostViewHolder(
             video.isVisible = !post.videoUrl.isNullOrBlank()
             videoImage.isVisible = !post.videoUrl.isNullOrBlank()
             attachment.visibility = View.GONE
-            val url = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
+            val url = "${BASE_URL}/avatars/${post.authorAvatar}"
             Glide.with(itemView)
                 .load(url)
                 .placeholder(R.drawable.ic_loading_24dp)
@@ -35,7 +36,7 @@ class PostViewHolder(
                 .circleCrop()
                 .into(Avatar)
 
-            val urlAttachment = "http://10.0.2.2:9999/images/${post.attachment?.url}"
+            val urlAttachment = "${BASE_URL}/images/${post.attachment?.url}"
             if (post.attachment != null) {
                 attachment.visibility = View.VISIBLE
                 Glide.with(itemView)
@@ -86,6 +87,11 @@ class PostViewHolder(
 
                 onInteractionListener.onVideo(post)
 
+            }
+            attachment.setOnClickListener {
+                post.attachment?.let { attach ->
+                    onInteractionListener.onImage(attach.url)
+                }
             }
 
         }

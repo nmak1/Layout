@@ -16,6 +16,7 @@ interface OnInteractionListener  {
     fun onEdit(post: Post) {}
     fun onVideo(post: Post){}
     fun onPost(post: Post){}
+    fun onImage(image: String) {}
 }
 
 
@@ -47,7 +48,6 @@ class PostsAdapter(
             oldItem.id == newItem.id
 
         override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean = oldItem == newItem
-        override fun getChangePayload(oldItem: Post, newItem: Post): Any = Unit
 
     }
 

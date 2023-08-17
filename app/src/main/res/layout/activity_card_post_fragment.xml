@@ -91,6 +91,7 @@
       app:layout_constraintHorizontal_bias="1.0"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="@id/bottomBarrier"
+      app:layout_constraintBottom_toTopOf="@+id/attachment"
       tools:text="@sample/posts.json/data/content" />
 
   <androidx.constraintlayout.widget.Barrier
