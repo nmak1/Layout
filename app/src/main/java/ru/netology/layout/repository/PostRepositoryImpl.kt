@@ -10,7 +10,6 @@ import ru.netology.layout.api.PostsApi
 import ru.netology.layout.dao.PostDao
 import ru.netology.layout.dto.Post
 import java.io.IOException
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -47,7 +46,7 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             }
             val body =
                 response.body() ?: throw ApiException(response.code(), response.message())
-            dao.insert(body.toEntity().map {
+            dao.insertInvisible(body.toEntity().map {
                 it.copy(views = false)
             })
             emit(body.size)
@@ -77,7 +76,7 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 
             val body = response.body() ?: throw ApiException(response.code(), response.message())
             dao.insert(PostEntity.fromDto(body)
-                .copy(views = true))
+                .copy())
         } catch (e: IOException) {
             throw NetworkException
         } catch (e: Exception) {
@@ -94,7 +93,7 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             }
             val body = response.body() ?: throw ApiException(response.code(), response.message())
             dao.insert(PostEntity.fromDto(body)
-                .copy(views = true))
+                .copy())
         } catch (e: IOException) {
             throw NetworkException
         } catch (e: Exception) {

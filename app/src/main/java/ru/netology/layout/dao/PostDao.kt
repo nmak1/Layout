@@ -1,8 +1,8 @@
 package ru.netology.layout.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy.Companion.IGNORE
 import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +13,7 @@ import ru.netology.layout.entity.PostEntity
 
 @Dao
 interface PostDao {
-    @Query("SELECT * FROM PostEntity WHERE views = 0 ORDER BY id DESC")
+    @Query("SELECT * FROM PostEntity WHERE views = 1 ORDER BY id DESC")
     fun getAll(): Flow<List<PostEntity>>
 
     @Insert(onConflict = REPLACE)
@@ -21,6 +21,8 @@ interface PostDao {
 
     @Insert(onConflict = REPLACE)
     suspend fun insert(posts: List<PostEntity>)
+    @Insert(onConflict = IGNORE)
+    suspend fun insertInvisible(posts: List<PostEntity>)
 
 
     @Query("UPDATE PostEntity SET content = :content WHERE id = :id")
