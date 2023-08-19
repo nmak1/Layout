@@ -14,7 +14,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.layout.R
-import ru.netology.layout.activity.NewPostFragment.Companion.textArg
 import ru.netology.layout.adapter.OnInteractionListener
 import ru.netology.layout.adapter.PostsAdapter
 import ru.netology.layout.databinding.FragmentFeedBinding
@@ -84,6 +83,10 @@ class FeedFragment : Fragment() {
 
 
         binding.container.adapter = adapter
+        viewModel.data.observe(viewLifecycleOwner) { state ->
+            adapter.submitList(state.posts)
+            binding.emptyText.isVisible = state.empty
+        }
         viewModel.data.observe(viewLifecycleOwner) { state ->
             adapter.submitList(state.posts)
             binding.emptyText.isVisible = state.empty

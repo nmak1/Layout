@@ -36,7 +36,7 @@ class PostViewHolder(
                 .circleCrop()
                 .into(Avatar)
 
-            val urlAttachment = "${BASE_URL}/images/${post.attachment?.url}"
+            val urlAttachment = "${BASE_URL}/media/${post.attachment?.url}"
             if (post.attachment != null) {
                 attachment.visibility = View.VISIBLE
                 Glide.with(itemView)

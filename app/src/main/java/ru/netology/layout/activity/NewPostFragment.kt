@@ -9,7 +9,6 @@ import androidx.core.net.toFile
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import ru.netology.layout.R
@@ -58,7 +57,7 @@ class NewPostFragment : Fragment() {
 
         binding.pickPhoto.setOnClickListener {
             ImagePicker.Builder(this)
-                .galleryOnly()
+                .cameraOnly()
                 .maxResultSize(2048, 2048)
                 .createIntent(photoLauncher::launch)
         }
@@ -104,6 +103,8 @@ class NewPostFragment : Fragment() {
                     else -> false
                 }
         }, viewLifecycleOwner)
+        binding.content.requestFocus()
+
         return binding.root
     }
     override fun onDestroyView() {
