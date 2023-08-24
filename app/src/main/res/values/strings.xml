@@ -35,4 +35,16 @@
     <string name="description_photo" />
     <string name="post_input_text_hint" />
     <string name="save" />
+    <string name="sign_in">sign_in</string>
+    <string name="sign_up">sign_up</string>
+    <string name="logout">logout</string>
+    <string name="sign_in_button">sign_in_button</string>
+    <string name="sign_in_password">sign_in_password</string>
+    <string name="sign_in_login">sign_in_login</string>
+    <string name="sign_in_name">sign_in_name</string>
+    <string name="registration">registration</string>
+    <string name="repeat_enter_password">repeat_enter_password</string>
+    <string name="name">name</string>
+    <string name="sign_up_name">sign_up_name</string>
+    <string name="wrong_password">wrong_password</string>
 </resources>

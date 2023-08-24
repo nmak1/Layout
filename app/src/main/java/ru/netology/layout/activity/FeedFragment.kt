@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -20,12 +20,16 @@ import ru.netology.layout.adapter.PostsAdapter
 import ru.netology.layout.databinding.FragmentFeedBinding
 import ru.netology.layout.dto.Post
 import ru.netology.layout.until.RetryTypes
+import ru.netology.layout.viewmodel.AuthViewModel
 import ru.netology.layout.viewmodel.PostViewModel
 
 
 class FeedFragment : Fragment() {
 
-    private val viewModel: PostViewModel by activityViewModels()
+    private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
+    @Suppress("UPPER_BOUND_VIOLATED")
+    private val viewModelAuth: AuthViewModel by viewModels<AuthViewModel>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,11 +51,13 @@ class FeedFragment : Fragment() {
             }
 
             override fun onLike(post: Post) {
-                if (post.likedByMe) {
-                    viewModel.unlikeById(post.id)
-                } else {
-                    viewModel.likeById(post.id)
-                }
+                if (viewModelAuth.authorized) {
+                    if (post.likedByMe)
+                        viewModel.unlikeById(post.id)
+                    else
+                        viewModel.likeById(post.id)
+                } else
+                    findNavController().navigate(R.id.action_feedFragment_to_signUpFragment)
             }
 
 
@@ -144,7 +150,9 @@ class FeedFragment : Fragment() {
         }
 
         binding.addPost.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+            if (viewModelAuth.authorized) {
+                findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+            } else findNavController().navigate(R.id.action_feedFragment_to_signUpFragment)
         }
         binding.swipeRefresh.setColorSchemeResources(android.R.color.holo_blue_light)
 
@@ -165,6 +173,8 @@ class FeedFragment : Fragment() {
     }
 
 }
+
+
 
 
 

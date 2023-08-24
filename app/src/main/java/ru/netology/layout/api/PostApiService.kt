@@ -1,6 +1,7 @@
 package ru.netology.layout.api
 
 
+import okhttp3.Interceptor
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -9,26 +10,35 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import ru.netology.layout.BuildConfig
+import ru.netology.layout.auth.AppAuth
 import ru.netology.layout.dto.Media
 
 import ru.netology.layout.dto.Post
 import java.util.concurrent.TimeUnit
 
 
-private const val BASE_URL = "http://10.0.2.2:9999/api/slow/"
+private const val BASE_URL = "${BuildConfig.BASE_URL}/api/slow/"
 
 private val logging = HttpLoggingInterceptor().apply {
     if (BuildConfig.DEBUG) {
         level = HttpLoggingInterceptor.Level.BODY
     }
 }
+private val authInterceptor = Interceptor { chain ->
+    val request = AppAuth.getInstance().data.value?.token?.let {
+        chain.request()
+            .newBuilder()
+            .addHeader("Authorization", it)
+            .build()
+    } ?: chain.request()
 
-
-
+    chain.proceed(request)
+}
 
 private val client = OkHttpClient.Builder()
     .connectTimeout(30, TimeUnit.SECONDS)
     .addInterceptor(logging)
+    .addInterceptor(authInterceptor)
     .build()
 
 private val retrofit = Retrofit.Builder()

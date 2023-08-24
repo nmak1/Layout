@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sign_up">sign_up</string>
+    <string name="logout">logout</string>
+    <string name="sign_in_button">sign_in_button</string>
+    <string name="sign_in_password">sign_in_password</string>
+    <string name="sign_in_name">sign_in_name</string>
+    <string name="registration">registration</string>
+    <string name="repeat_enter_password">repeat_enter_password</string>
+    <string name="name">name</string>
+    <string name="sign_up_name">sign_up_name</string>
+</resources>

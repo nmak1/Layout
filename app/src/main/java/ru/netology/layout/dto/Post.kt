@@ -4,6 +4,7 @@ package ru.netology.layout.dto
 data class Post(
     val id: Long,
     val author: String,
+    val authorId: Long,
     val published: String,
     val content: String,
     val likedByMe: Boolean ,
@@ -13,6 +14,7 @@ data class Post(
     val videoUrl: String?= null ,
     val authorAvatar: String?=null,
     val attachment: Attachment? = null,
+    val ownedByMe: Boolean = false,
 )
 
 
