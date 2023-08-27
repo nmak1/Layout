@@ -20,8 +20,8 @@ import ru.netology.layout.viewmodel.AuthViewModel
 
 
 class AppActivity : AppCompatActivity(R.layout.activity_app) {
-    @Suppress("UPPER_BOUND_VIOLATED")
-    private val viewModel: AuthViewModel by viewModels<AuthViewModel>()
+
+    private val viewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

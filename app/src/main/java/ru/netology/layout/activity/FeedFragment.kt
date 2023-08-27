@@ -27,8 +27,8 @@ import ru.netology.layout.viewmodel.PostViewModel
 class FeedFragment : Fragment() {
 
     private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
-    @Suppress("UPPER_BOUND_VIOLATED")
-    private val viewModelAuth: AuthViewModel by viewModels<AuthViewModel>()
+
+    private val viewModelAuth: AuthViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
 
     override fun onCreateView(

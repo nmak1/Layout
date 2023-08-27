@@ -26,6 +26,7 @@ private val emptyPost = Post(
 
     0,
     "",
+    0,
     "",
     "",
     false,
