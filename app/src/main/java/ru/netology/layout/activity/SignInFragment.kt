@@ -29,7 +29,7 @@ class SignInFragment : Fragment() {
 
         with(binding) {
             login.requestFocus()
-            login.setOnClickListener {
+            signInButton.setOnClickListener {
                 viewModel.loginAttempt(login.text.toString(), password.text.toString())
             }
         }

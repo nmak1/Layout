@@ -7,6 +7,6 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        AppAuth.initAuth(this)
+        AppAuth.initApp(this)
     }
 }

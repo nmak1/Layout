@@ -3,12 +3,11 @@ package ru.netology.layout.viewmodel
 import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import ru.netology.layout.api.PostsApi
+import ru.netology.layout.auth.AppAuth
 import ru.netology.layout.db.AppDb
 import ru.netology.layout.dto.MediaUpload
 import ru.netology.layout.dto.Post
@@ -38,12 +37,21 @@ private val emptyPost = Post(
     attachment = null
 )
 
-
+@ExperimentalCoroutinesApi
 class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: PostRepository =
         PostRepositoryImpl(AppDb.getInstance(application).postDao())
-    val data: LiveData<FeedModel> = repository.data.map { FeedModel(it, it.isEmpty()) }
-        .asLiveData(Dispatchers.Default)
+    val data: LiveData<FeedModel> = AppAuth.getInstance()
+        .authStateFlow
+        .flatMapLatest { (myId, _) ->
+            repository.data
+                .map { posts ->
+                    FeedModel(
+                        posts.map { it.copy(ownedByMe = it.authorId == myId) },
+                        posts.isEmpty()
+                    )
+                }
+        }.asLiveData(Dispatchers.Default)
     private val edited = MutableLiveData(emptyPost)
 
     private val _state = MutableLiveData<FeedModelState>()

@@ -23,10 +23,10 @@ private val logging = HttpLoggingInterceptor().apply {
 }
 
 private val authInterceptor = Interceptor { chain ->
-    val request = AppAuth.getInstance().data.value?.token?.let {
+    val request = AppAuth.getInstance().authStateFlow.value.token?.let {
         chain.request()
             .newBuilder()
-            .addHeader("Authorization", it)
+            .addHeader("Authorization",it)
             .build()
     } ?: chain.request()
 
@@ -46,14 +46,14 @@ private val retrofit = Retrofit.Builder()
 
 interface UserApiService {
     @FormUrlEncoded
-    @POST("users/authentication")
+    @POST("authentication")
     suspend fun updateUser(
         @Field("login") login: String?,
         @Field("pass") pass: String?,
     ): Response<User>
 
     @FormUrlEncoded
-    @POST("users/registration")
+    @POST("registration")
     suspend fun registrationUser(
         @Field("login") login: String?,
         @Field("pass") pass: String?,

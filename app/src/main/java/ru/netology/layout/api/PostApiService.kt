@@ -25,7 +25,7 @@ private val logging = HttpLoggingInterceptor().apply {
     }
 }
 private val authInterceptor = Interceptor { chain ->
-    val request = AppAuth.getInstance().data.value?.token?.let {
+    val request = AppAuth.getInstance().authStateFlow.value.token?.let {
         chain.request()
             .newBuilder()
             .addHeader("Authorization", it)

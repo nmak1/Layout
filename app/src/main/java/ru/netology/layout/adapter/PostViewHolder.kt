@@ -50,7 +50,7 @@ class PostViewHolder(
             }
 
 
-            menu.isVisible = post.ownedByMe
+            menu.visibility = if (post.ownedByMe) View.VISIBLE else View.INVISIBLE
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.post_options)
