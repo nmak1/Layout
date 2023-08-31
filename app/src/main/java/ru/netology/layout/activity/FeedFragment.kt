@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.netology.layout.R
 import ru.netology.layout.activity.NewPostFragment.Companion.textArg
 import ru.netology.layout.adapter.OnInteractionListener
@@ -30,7 +31,7 @@ class FeedFragment : Fragment() {
 
     private val viewModelAuth: AuthViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
-
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

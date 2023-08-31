@@ -1,10 +1,17 @@
 package ru.netology.layout.auth
 
+import android.annotation.SuppressLint
 import android.content.Context
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import ru.netology.layout.dto.PushToken
+import ru.netology.layout.api.PostsApi
 class AppAuth private constructor(context: Context) {
     private val prefs = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
     private val idKey = "id"
@@ -26,6 +33,7 @@ class AppAuth private constructor(context: Context) {
         } else {
             _authStateFlow = MutableStateFlow(AuthState(id, token))
         }
+        sendPushToken()
     }
     val authStateFlow: StateFlow<AuthState> = _authStateFlow.asStateFlow()
 
@@ -46,6 +54,19 @@ class AppAuth private constructor(context: Context) {
         with(prefs.edit()) {
             clear()
             commit()
+        }
+        sendPushToken()
+    }
+    @SuppressLint("SuspiciousIndentation")
+    fun sendPushToken(token: String? = null) {
+        CoroutineScope(Dispatchers.Default).launch {
+            try {
+                val pushToken = PushToken(token ?: FirebaseMessaging.getInstance().token.await())
+                    PostsApi.service.sendPushToken(pushToken)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                //do nothing
+            }
         }
     }
 

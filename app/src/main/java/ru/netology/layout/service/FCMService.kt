@@ -13,12 +13,10 @@ import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
-import ru.netology.layout.service.notifications.Action
-import ru.netology.layout.service.notifications.Like
-import ru.netology.layout.service.notifications.NewPost
 import ru.netology.layout.R
+import ru.netology.layout.auth.AppAuth
+import ru.netology.layout.service.notifications.*
 import kotlin.random.Random
-import ru.netology.layout.service.notifications.Notification
 
 class FCMService : FirebaseMessagingService() {
     private val action = "action"
@@ -39,8 +37,13 @@ class FCMService : FirebaseMessagingService() {
             manager.createNotificationChannel(channel)
         }
     }
-
+    override fun onNewToken(token: String) {
+        println(token)
+        AppAuth.getInstance().sendPushToken(token)
+    }
     override fun onMessageReceived(message: RemoteMessage) {
+        val push = gson.fromJson(message.data[content], Push::class.java)
+        val someId = AppAuth.getInstance().authStateFlow.value.id
 
         try {
             message.data[action]?.let {
@@ -62,10 +65,42 @@ class FCMService : FirebaseMessagingService() {
         } catch (error: IllegalArgumentException) {
             errorNotification(gson.fromJson(message.data[content], Notification::class.java))
         }
+        when (push.recipientId) {
+            someId, null -> {
+                sendNotification(push)
+            }
+            else -> AppAuth.getInstance().sendPushToken()
+        }
     }
 
-    override fun onNewToken(token: String) {
-        println(token)
+    private fun sendNotification(push: Push) {
+        val notification = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle(
+                getString(
+                    R.string.notification_user_login,
+                    push.content
+                )
+            )
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        NotificationManagerCompat.from(this)
+            .notify(Random.nextInt(100_000), notification)
     }
 
     private fun errorNotification(content: Notification) {

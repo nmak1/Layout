@@ -41,6 +41,7 @@ private val emptyPost = Post(
 class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: PostRepository =
         PostRepositoryImpl(AppDb.getInstance(application).postDao())
+
     val data: LiveData<FeedModel> = AppAuth.getInstance()
         .authStateFlow
         .flatMapLatest { (myId, _) ->

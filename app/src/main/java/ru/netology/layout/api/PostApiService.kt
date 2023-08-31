@@ -14,6 +14,7 @@ import ru.netology.layout.auth.AppAuth
 import ru.netology.layout.dto.Media
 
 import ru.netology.layout.dto.Post
+import ru.netology.layout.dto.PushToken
 import java.util.concurrent.TimeUnit
 
 
@@ -48,6 +49,8 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface PostsApiService {
+    @POST("users/push-tokens")
+    suspend fun sendPushToken(@Body pushToken: PushToken): Response<Unit>
     @GET("posts")
    suspend fun getAll(): Response<List<Post>>
     @GET("posts/{id}/newer")
