@@ -12,6 +12,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ru.netology.layout.dto.PushToken
 import ru.netology.layout.api.PostsApi
+
+
 class AppAuth private constructor(context: Context) {
     private val prefs = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
     private val idKey = "id"
