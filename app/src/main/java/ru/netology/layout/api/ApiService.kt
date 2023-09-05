@@ -10,8 +10,6 @@ import ru.netology.layout.dto.PushToken
 import ru.netology.layout.dto.User
 
 
-
-
 interface ApiService {
     @POST("users/push-tokens")
     suspend fun sendPushToken(@Body pushToken: PushToken): Response<Unit>
@@ -40,14 +38,14 @@ interface ApiService {
         @Part content: MultipartBody.Part,
     ): Response<Media>
     @FormUrlEncoded
-    @POST("authentication")
+    @POST("users/authentication")
     suspend fun updateUser(
         @Field("login") login: String?,
         @Field("pass") pass: String?,
     ): Response<User>
 
     @FormUrlEncoded
-    @POST("registration")
+    @POST("users/registration")
     suspend fun registrationUser(
         @Field("login") login: String?,
         @Field("pass") pass: String?,
