@@ -8,15 +8,18 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toFile
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.netology.layout.R
 import ru.netology.layout.until.AndroidUtils
 import ru.netology.layout.until.StringArg
 import ru.netology.layout.viewmodel.PostViewModel
 import ru.netology.layout.databinding.FragmentNewPostBinding
-
+@OptIn(ExperimentalCoroutinesApi::class)
+@AndroidEntryPoint
 class NewPostFragment : Fragment() {
 
     companion object {
@@ -24,7 +27,7 @@ class NewPostFragment : Fragment() {
     }
     private var fragmentBinding: FragmentNewPostBinding? = null
 
-    private val viewModel: PostViewModel by activityViewModels()
+    private val viewModel: PostViewModel by viewModels()
 
 
     override fun onCreateView(

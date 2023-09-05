@@ -7,13 +7,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.layout.auth.AppAuth
 import ru.netology.layout.databinding.FragmentSignInBinding
 import ru.netology.layout.viewmodel.SignInViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SignInFragment : Fragment() {
+    @Inject
+    lateinit var appAuth: AppAuth
 
-    private val viewModel: SignInViewModel by viewModels(ownerProducer = ::requireParentFragment)
+    private val viewModel: SignInViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,7 +28,7 @@ class SignInFragment : Fragment() {
         val binding = FragmentSignInBinding.inflate(inflater, container, false)
 
         viewModel.data.observe(viewLifecycleOwner) {
-            AppAuth.getInstance().setAuth(it.id, it.token)
+            appAuth.setAuth(it.id, it.token)
             findNavController().popBackStack()
         }
 

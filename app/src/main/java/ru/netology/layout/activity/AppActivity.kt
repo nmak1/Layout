@@ -20,9 +20,19 @@ import ru.netology.layout.viewmodel.AuthViewModel
 import android.content.pm.PackageManager
 import android.os.Build
 import android.Manifest
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class AppActivity : AppCompatActivity(R.layout.activity_app) {
+    @Inject
+    lateinit var firebaseMessaging: FirebaseMessaging
+
+    @Inject
+    lateinit var appAuth: AppAuth
+
+    @Inject
+    lateinit var googleApiAvailability: GoogleApiAvailability
 
     private val viewModel: AuthViewModel by viewModels()
     private fun requestNotificationsPermission() {
@@ -44,7 +54,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
 
         requestNotificationsPermission()
 
-        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+        firebaseMessaging.token.addOnSuccessListener{
             println("Your current token is: $it")
         }
 
@@ -95,7 +105,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                             true
                         }
                         R.id.logout -> {
-                            AppAuth.getInstance().removeAuth()
+                            appAuth.removeAuth()
                             true
                         }
                         else -> false
@@ -107,7 +117,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
 
     }
     private fun checkGoogleApiAvailability() {
-        with(GoogleApiAvailability.getInstance()) {
+        with(googleApiAvailability) {
             val code = isGooglePlayServicesAvailable(this@AppActivity)
             if (code == ConnectionResult.SUCCESS) {
                 return@with

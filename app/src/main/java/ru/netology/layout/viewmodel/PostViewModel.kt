@@ -1,24 +1,22 @@
 package ru.netology.layout.viewmodel
 
-import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import ru.netology.layout.api.PostsApi
 import ru.netology.layout.auth.AppAuth
-import ru.netology.layout.db.AppDb
 import ru.netology.layout.dto.MediaUpload
 import ru.netology.layout.dto.Post
 import ru.netology.layout.model.FeedModel
 import ru.netology.layout.model.FeedModelState
 import ru.netology.layout.model.PhotoModel
 import ru.netology.layout.repository.PostRepository
-import ru.netology.layout.repository.PostRepositoryImpl
 import ru.netology.layout.until.RetryTypes
 import ru.netology.layout.until.SingleLiveEvent
 import java.io.File
+import javax.inject.Inject
 
 
 private val emptyPost = Post(
@@ -38,11 +36,13 @@ private val emptyPost = Post(
 )
 
 @ExperimentalCoroutinesApi
-class PostViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: PostRepository =
-        PostRepositoryImpl(AppDb.getInstance(application).postDao())
-
-    val data: LiveData<FeedModel> = AppAuth.getInstance()
+@HiltViewModel
+@OptIn(ExperimentalCoroutinesApi::class)
+class PostViewModel @Inject constructor(
+    private val repository: PostRepository,
+    appAuth: AppAuth,
+) : ViewModel() {
+    val data: LiveData<FeedModel> = appAuth
         .authStateFlow
         .flatMapLatest { (myId, _) ->
             repository.data
@@ -115,7 +115,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             try {
                 if (post != null) {
-                    PostsApi.service.save(post)
+                    save()
                     loadPosts()
                 }
             } catch (e: Exception) {

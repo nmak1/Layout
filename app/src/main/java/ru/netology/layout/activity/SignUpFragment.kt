@@ -9,15 +9,19 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.layout.R
 import ru.netology.layout.auth.AppAuth
 import ru.netology.layout.databinding.FragmentSignUpBinding
 import ru.netology.layout.viewmodel.SignUpViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SignUpFragment : Fragment() {
+    @Inject
+    lateinit var appAuth: AppAuth
 
-    private val viewModel: SignUpViewModel by viewModels(ownerProducer = ::requireParentFragment)
-
+    private val viewModel: SignUpViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -26,7 +30,7 @@ class SignUpFragment : Fragment() {
         val binding = FragmentSignUpBinding.inflate(inflater, container, false)
 
         viewModel.data.observe(viewLifecycleOwner) {
-            AppAuth.getInstance().setAuth(it.id, it.token)
+            appAuth.setAuth(it.id, it.token)
             findNavController().popBackStack()
         }
 

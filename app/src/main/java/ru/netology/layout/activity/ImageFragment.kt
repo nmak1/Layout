@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import ru.netology.layout.BuildConfig.BASE_URL
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.layout.R
 import ru.netology.layout.databinding.FragmentImageBinding
+import ru.netology.layout.BuildConfig.BASE_URL
 
+@AndroidEntryPoint
 class ImageFragment : Fragment() {
 
     override fun onCreateView(

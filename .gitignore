@@ -60,3 +60,4 @@ captures/
 
 ### Firebase ###
 app/google-services.json
+app/fcm.json
