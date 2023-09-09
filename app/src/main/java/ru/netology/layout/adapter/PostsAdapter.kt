@@ -2,10 +2,10 @@ package ru.netology.layout.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import ru.netology.layout.dto.Post
 import ru.netology.layout.databinding.ActivityCardPostFragmentBinding
+import ru.netology.layout.dto.Post
 
 //
 interface OnInteractionListener  {
@@ -27,7 +27,7 @@ interface OnInteractionListener  {
 
 class PostsAdapter(
     private val onInteractionListener: OnInteractionListener,
-) : ListAdapter<Post,PostViewHolder>(PostDiffCallback()) {
+) : PagingDataAdapter<Post, PostViewHolder>(PostDiffCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -37,7 +37,7 @@ class PostsAdapter(
 
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        val post = getItem(position)
+        val post = getItem(position) ?: return
         holder.bind(post)
 
     }

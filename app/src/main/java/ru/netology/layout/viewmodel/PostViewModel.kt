@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.map
 import ru.netology.layout.auth.AppAuth
 import ru.netology.layout.dto.MediaUpload
 import ru.netology.layout.dto.Post
-import ru.netology.layout.model.FeedModel
 import ru.netology.layout.model.FeedModelState
 import ru.netology.layout.model.PhotoModel
 import ru.netology.layout.repository.PostRepository
@@ -17,7 +16,10 @@ import ru.netology.layout.until.RetryTypes
 import ru.netology.layout.until.SingleLiveEvent
 import java.io.File
 import javax.inject.Inject
-
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.Flow
+import androidx.paging.PagingData
+import androidx.paging.map
 
 private val emptyPost = Post(
 
@@ -42,27 +44,26 @@ class PostViewModel @Inject constructor(
     private val repository: PostRepository,
     appAuth: AppAuth,
 ) : ViewModel() {
-    val data: LiveData<FeedModel> = appAuth
-        .authStateFlow
-        .flatMapLatest { (myId, _) ->
+    val data: Flow<PagingData<Post>> = appAuth
+        .authStateFlow.map {
+            it.id
+        }.flatMapLatest { id ->
             repository.data
-                .map { posts ->
-                    FeedModel(
-                        posts.map { it.copy(ownedByMe = it.authorId == myId) },
-                        posts.isEmpty()
-                    )
+                .map { it.map { post ->
+                        post.copy(ownedByMe = post.authorId == id)
+                    }
                 }
-        }.asLiveData(Dispatchers.Default)
+        }.flowOn(Dispatchers.Default)
     private val edited = MutableLiveData(emptyPost)
 
     private val _state = MutableLiveData<FeedModelState>()
     val state: LiveData<FeedModelState>
         get() = _state
 
-    val newerCount: LiveData<Int> = data.switchMap {
-        repository.getNewerCount(it.posts.firstOrNull()?.id ?: 0L)
-            .asLiveData(Dispatchers.Default)
-    }
+//    val newerCount: LiveData<Int> = data.switchMap {
+//        repository.getNewerCount(it.posts.firstOrNull()?.id ?: 0L)
+//            .asLiveData(Dispatchers.Default)
+//    }
 
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>

@@ -1,30 +1,42 @@
 package ru.netology.layout.repository
 
-import ru.netology.layout.entity.PostEntity
-import ru.netology.layout.entity.toDto
-import ru.netology.layout.entity.toEntity
-import ru.netology.layout.errors.ApiException
-import ru.netology.layout.errors.NetworkException
-import ru.netology.layout.errors.UnknownException
-import ru.netology.layout.dao.PostDao
-import java.io.IOException
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import ru.netology.layout.api.ApiService
+import ru.netology.layout.dao.PostDao
 import ru.netology.layout.dto.*
+import ru.netology.layout.entity.PostEntity
+import ru.netology.layout.entity.toEntity
+import ru.netology.layout.errors.ApiException
 import ru.netology.layout.errors.AppError
+import ru.netology.layout.errors.NetworkException
+import ru.netology.layout.errors.UnknownException
+import java.io.IOException
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class PostRepositoryImpl @Inject constructor(
     private val dao: PostDao,
     private val apiService: ApiService,
 ) : PostRepository {
 
-    override val data = dao.getAll().map(List<PostEntity>::toDto)
-        .flowOn(Dispatchers.Default)
+    override val data = Pager(
+        config = PagingConfig(pageSize = 10, enablePlaceholders = false),
+        pagingSourceFactory = {
+            PostPagingSource(
+                apiService
+            )
+        }
+    ).flow
 
     override suspend fun getAll() {
         try {

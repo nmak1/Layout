@@ -1,5 +1,6 @@
 package ru.netology.layout.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.Companion.IGNORE
@@ -14,11 +15,12 @@ import ru.netology.layout.entity.PostEntity
 @Dao
 interface PostDao {
     @Query("SELECT * FROM PostEntity WHERE views = 0 ORDER BY id DESC")
-    fun getAll(): Flow<List<PostEntity>>
+     fun getAll(): Flow<List<PostEntity>>
 
     @Insert(onConflict = REPLACE)
     suspend fun insert(post: PostEntity)
-
+    @Query("SELECT * FROM PostEntity ORDER BY id DESC")
+    fun getPagingSource(): PagingSource<Int, PostEntity>
     @Insert(onConflict = REPLACE)
     suspend fun insert(posts: List<PostEntity>)
     @Insert(onConflict = IGNORE)

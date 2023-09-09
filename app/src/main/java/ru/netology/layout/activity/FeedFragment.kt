@@ -10,13 +10,18 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import ru.netology.layout.R
-import ru.netology.layout.activity.NewPostFragment.Companion.textArg
 import ru.netology.layout.adapter.OnInteractionListener
 import ru.netology.layout.adapter.PostsAdapter
 import ru.netology.layout.databinding.FragmentFeedBinding
@@ -24,7 +29,7 @@ import ru.netology.layout.dto.Post
 import ru.netology.layout.until.RetryTypes
 import ru.netology.layout.viewmodel.AuthViewModel
 import ru.netology.layout.viewmodel.PostViewModel
-
+@Suppress("DEPRECATION")
 @OptIn(ExperimentalCoroutinesApi::class)
 @AndroidEntryPoint
 class FeedFragment : Fragment() {
@@ -33,24 +38,22 @@ class FeedFragment : Fragment() {
 
     private val viewModelAuth: AuthViewModel by viewModels()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @ExperimentalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         val binding = FragmentFeedBinding.inflate(inflater, container, false)
+        val bundle = Bundle()
 
         val adapter = PostsAdapter(object : OnInteractionListener {
 
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
-                findNavController().navigate(
-                    R.id.action_feedFragment_to_newPostFragment,
-                    Bundle().apply {
-                        textArg = post.content
-                    }
-                )
+                bundle.putString("content", post.content)
+                findNavController().navigate(R.id.action_feedFragment_to_newPostFragment, bundle)
+
             }
 
             override fun onLike(post: Post) {
@@ -78,8 +81,9 @@ class FeedFragment : Fragment() {
                     Intent.createChooser(intent, getString(R.string.chooser_share_post))
                 startActivity(shareIntent)
             }
+
             override fun onImage(image: String) {
-                val bundle = Bundle().apply {
+                bundle.apply {
                     putString("image", image)
                 }
                 findNavController().navigate(
@@ -99,13 +103,11 @@ class FeedFragment : Fragment() {
 
 
         binding.container.adapter = adapter
-        viewModel.data.observe(viewLifecycleOwner) { state ->
-            adapter.submitList(state.posts)
-            binding.emptyText.isVisible = state.empty
-        }
-        viewModel.data.observe(viewLifecycleOwner) { state ->
-            adapter.submitList(state.posts)
-            binding.emptyText.isVisible = state.empty
+
+        lifecycleScope.launchWhenCreated {
+            viewModel.data.collectLatest {
+                adapter.submitData(it)
+            }
         }
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
@@ -132,14 +134,17 @@ class FeedFragment : Fragment() {
         }
 
 
-        viewModel.newerCount.observe(viewLifecycleOwner) {
-            if (it > 0) {
-                binding.newPosts.text = getString(R.string.new_posts)
-                binding.newPosts.visibility = View.VISIBLE
+        lifecycleScope.launchWhenCreated {
+            adapter.loadStateFlow.collectLatest {
+                binding.swipeRefresh.isRefreshing =
+                    it.prepend is LoadState.Loading ||
+                            it.append is LoadState.Loading ||
+                            it.refresh is LoadState.Loading
             }
-            println("Newer count: $it")
         }
-
+        viewModelAuth.data.observe(viewLifecycleOwner) {
+            adapter.refresh()
+        }
         binding.newPosts.setOnClickListener {
             viewModel.loadNewPosts()
             binding.container.smoothScrollToPosition(0)
@@ -148,9 +153,9 @@ class FeedFragment : Fragment() {
 
 
 
-        binding.retryButton.setOnClickListener {
-            viewModel.loadPosts()
-        }
+//        binding.retryButton.setOnClickListener {
+//            viewModel.loadPosts()
+//        }
 
         binding.addPost.setOnClickListener {
             if (viewModelAuth.authorized) {
@@ -160,15 +165,32 @@ class FeedFragment : Fragment() {
         binding.swipeRefresh.setColorSchemeResources(android.R.color.holo_blue_light)
 
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.loadPosts()
+            adapter.refresh()
+            binding.newPosts.visibility = View.GONE
         }
 
-        viewModel.newerCount.observe(viewLifecycleOwner) {
-            if (it > 0) {
-                binding.newPosts.text = getString(R.string.new_posts)
-                binding.newPosts.visibility = View.VISIBLE
+        lifecycleScope.launch {
+            val scrollingTop = adapter
+                .loadStateFlow
+                .distinctUntilChangedBy {
+                    it.source.refresh
+                }
+                .map {
+                    it.source.refresh is LoadState.NotLoading
+                }
+
+            scrollingTop.collectLatest { scrolling ->
+                if (scrolling) binding.container.scrollToPosition(0)
             }
-            println("Newer count: $it")
+        }
+
+        lifecycleScope.launchWhenCreated {
+            adapter.loadStateFlow.collectLatest {
+                binding.swipeRefresh.isRefreshing =
+                    it.prepend is LoadState.Loading ||
+                            it.append is LoadState.Loading ||
+                            it.refresh is LoadState.Loading
+            }
         }
 
 
