@@ -10,7 +10,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import ru.netology.layout.BuildConfig
-
 import ru.netology.layout.api.ApiService
 import ru.netology.layout.auth.AppAuth
 import java.util.concurrent.TimeUnit

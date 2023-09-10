@@ -2,10 +2,9 @@ package ru.netology.layout.viewmodel
 
 import android.net.Uri
 import androidx.lifecycle.*
+import androidx.lifecycle.switchMap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import ru.netology.layout.auth.AppAuth
 import ru.netology.layout.dto.MediaUpload
 import ru.netology.layout.dto.Post
@@ -16,10 +15,10 @@ import ru.netology.layout.until.RetryTypes
 import ru.netology.layout.until.SingleLiveEvent
 import java.io.File
 import javax.inject.Inject
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.Flow
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import androidx.paging.map
+import kotlinx.coroutines.flow.*
 
 private val emptyPost = Post(
 
@@ -37,23 +36,13 @@ private val emptyPost = Post(
     attachment = null
 )
 
-@ExperimentalCoroutinesApi
 @HiltViewModel
-@OptIn(ExperimentalCoroutinesApi::class)
 class PostViewModel @Inject constructor(
     private val repository: PostRepository,
-    appAuth: AppAuth,
 ) : ViewModel() {
-    val data: Flow<PagingData<Post>> = appAuth
-        .authStateFlow.map {
-            it.id
-        }.flatMapLatest { id ->
-            repository.data
-                .map { it.map { post ->
-                        post.copy(ownedByMe = post.authorId == id)
-                    }
-                }
-        }.flowOn(Dispatchers.Default)
+    private val cached = repository.data.cachedIn(viewModelScope)
+
+    val data: Flow<PagingData<Post>> = cached
     private val edited = MutableLiveData(emptyPost)
 
     private val _state = MutableLiveData<FeedModelState>()
