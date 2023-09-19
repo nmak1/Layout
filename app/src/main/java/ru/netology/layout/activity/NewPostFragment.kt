@@ -18,7 +18,7 @@ import ru.netology.layout.until.AndroidUtils
 import ru.netology.layout.until.StringArg
 import ru.netology.layout.viewmodel.PostViewModel
 import ru.netology.layout.databinding.FragmentNewPostBinding
-@OptIn(ExperimentalCoroutinesApi::class)
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class NewPostFragment : Fragment() {
 

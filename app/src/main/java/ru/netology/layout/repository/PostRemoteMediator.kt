@@ -42,13 +42,15 @@ class PostRemoteMediator(
                 PREPEND -> {
                     val id = postRemoteKeyDao.max() ?: return MediatorResult.Success(false)
                     apiService.getAfter(id, state.config.pageSize)
-                    return MediatorResult.Success(true)
+                    return MediatorResult.Success(false)
                 }
             }
 
             if (!result.isSuccessful) {
                 throw ApiException(result.code(), result.message())
             }
+            if (result.body().isNullOrEmpty())
+                return MediatorResult.Success(true)
 
             val body = result.body() ?: throw ApiException(result.code(), result.message())
 

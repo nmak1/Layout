@@ -48,5 +48,6 @@
     <string name="sign_up_name">sign_up_name</string>
     <string name="wrong_password">wrong_password</string>
     <string name="notification_user_login">Login user by id %1$s</string>
+    <string name="retry">retry</string>
     <item name="navigation" type="id" />
 </resources>

@@ -1,11 +1,18 @@
 package ru.netology.layout.viewmodel
 
 import android.net.Uri
-import androidx.lifecycle.*
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
-import ru.netology.layout.auth.AppAuth
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+import ru.netology.layout.dto.FeedItem
 import ru.netology.layout.dto.MediaUpload
 import ru.netology.layout.dto.Post
 import ru.netology.layout.model.FeedModelState
@@ -15,10 +22,6 @@ import ru.netology.layout.until.RetryTypes
 import ru.netology.layout.until.SingleLiveEvent
 import java.io.File
 import javax.inject.Inject
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import androidx.paging.map
-import kotlinx.coroutines.flow.*
 
 private val emptyPost = Post(
 
@@ -42,7 +45,7 @@ class PostViewModel @Inject constructor(
 ) : ViewModel() {
     private val cached = repository.data.cachedIn(viewModelScope)
 
-    val data: Flow<PagingData<Post>> = cached
+    val data: Flow<PagingData<FeedItem>> = cached
     private val edited = MutableLiveData(emptyPost)
 
     private val _state = MutableLiveData<FeedModelState>()
